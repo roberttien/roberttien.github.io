@@ -2880,28 +2880,53 @@ function renderScoreBar() {
 // ── Generate blank ──
 function generateBlanks(text) {
   const cleaned = text.replace(/\s/g, '');
-  const isShort = cleaned.length < 5;
-  const targetCount = isShort ? (cleaned.length >= 2 ? 1 : 1) : (cleaned.length <= 8 ? 2 : 3);
+  const totalLen = cleaned.length;
 
-  // Find all Chinese word segments (2-4 chars) and English words (3+ chars)
+  // 計算最多可挖空的字數上限
+  // 5字以內：最多挖 floor(totalLen/2) 字；5字以上：最多挖 floor(totalLen/3) 字
+  const maxBlankChars = totalLen <= 5
+    ? Math.floor(totalLen / 2)
+    : Math.floor(totalLen / 3);
+
+  // Find segments: prefer chunks bounded by punctuation or word boundaries
+  // Split by punctuation first, then find 2-3 char chunks within each clause
   const segments = [];
-  for (const m of text.matchAll(/[\u4e00-\u9fff]{2,4}/g)) {
-    segments.push({ start: m.index, end: m.index + m[0].length, word: m[0] });
+  const clauses = [...text.matchAll(/[^，。！？、；：「」『』\s]+/g)];
+  for (const clause of clauses) {
+    const s = clause[0];
+    const base = clause.index;
+    // Extract 2-3 char windows that start at even positions within the clause
+    for (let i = 0; i < s.length - 1; i += 2) {
+      for (let len = 2; len <= Math.min(3, s.length - i); len++) {
+        const chunk = s.slice(i, i + len);
+        if (/^[\u4e00-\u9fff]+$/.test(chunk)) {
+          segments.push({ start: base + i, end: base + i + len, word: chunk });
+          break; // only take one length per position
+        }
+      }
+    }
   }
   for (const m of text.matchAll(/[a-zA-Z]{3,}/g)) {
     segments.push({ start: m.index, end: m.index + m[0].length, word: m[0] });
   }
   if (!segments.length) return null;
 
-  // Sort by start, pick non-overlapping ones
-  segments.sort((a, b) => a.start - b.start);
+  // 隨機排序，依序挑選不超過 maxBlankChars 的片段
+  segments.sort(() => Math.random() - 0.5);
   const chosen = [];
+  let usedChars = 0;
   for (const seg of segments) {
-    if (chosen.length >= targetCount) break;
+    if (usedChars + seg.word.length > maxBlankChars) continue;
     const overlaps = chosen.some(c => seg.start < c.end && seg.end > c.start);
-    if (!overlaps) chosen.push(seg);
+    if (!overlaps) {
+      chosen.push(seg);
+      usedChars += seg.word.length;
+    }
   }
   if (!chosen.length) return null;
+
+  // 依出現順序排列
+  chosen.sort((a, b) => a.start - b.start);
 
   // Build display string with blanks and collect answers
   let result = '';
