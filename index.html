@@ -1013,156 +1013,7 @@
   .dark-toggle:hover { border-color: var(--text); color: var(--text); }
 
 
-  /* ── Quiz button on cards ── */
-  .quiz-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    padding: 0.28rem 0.7rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .quiz-btn:hover { border-color: #c8a96e; color: #c8a96e; }
 
-  /* ── Quiz modal ── */
-  .quiz-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(250,249,247,0.95);
-    backdrop-filter: blur(8px);
-    z-index: 700;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  .quiz-overlay.open { display: flex; }
-  .quiz-modal {
-    background: #fff;
-    border: 1px solid var(--border);
-    padding: 2.5rem 2rem 2rem;
-    width: 100%;
-    max-width: 520px;
-    box-shadow: 0 16px 64px rgba(0,0,0,0.1);
-    position: relative;
-    text-align: center;
-  }
-  body.dark .quiz-modal { background: #222224; }
-  .quiz-close {
-    position: absolute; top: 1rem; right: 1rem;
-    background: none; border: none; font-size: 1.1rem;
-    cursor: pointer; color: var(--muted); padding: 0.3rem;
-  }
-  .quiz-close:hover { color: var(--text); }
-  .quiz-label {
-    font-size: 0.65rem; letter-spacing: 0.2em;
-    text-transform: uppercase; color: #c8a96e;
-    margin-bottom: 1.2rem;
-  }
-  .quiz-question {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem; font-weight: 400;
-    line-height: 1.9; margin-bottom: 1.8rem;
-    letter-spacing: 0.04em;
-  }
-  .quiz-blank {
-    display: inline-block;
-    border-bottom: 2px solid #c8a96e;
-    min-width: 80px; width: auto;
-    color: #c8a96e; font-style: italic;
-  }
-  .quiz-input {
-    width: 100%; padding: 0.6rem 0;
-    font-family: 'Noto Serif TC', serif;
-    font-size: 1rem; font-weight: 300;
-    background: transparent; border: none;
-    border-bottom: 1px solid var(--border);
-    color: var(--text); outline: none;
-    text-align: center; letter-spacing: 0.1em;
-    transition: border-color 0.2s;
-    margin-bottom: 1.5rem;
-  }
-  .quiz-input:focus { border-bottom-color: #c8a96e; }
-  .quiz-result {
-    font-size: 0.85rem; line-height: 1.8;
-    margin-bottom: 1.5rem; min-height: 2rem;
-  }
-  .quiz-result.correct { color: #5a9e6f; }
-  .quiz-result.wrong   { color: #c44; }
-  .quiz-submit {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.78rem; letter-spacing: 0.1em;
-    padding: 0.55rem 1.8rem;
-    border: 1px solid var(--text);
-    background: var(--text); color: var(--bg);
-    cursor: pointer; transition: background 0.2s;
-  }
-  .quiz-submit:hover { background: #333; }
-  .quiz-submit:disabled { opacity: 0.4; cursor: not-allowed; }
-  .quiz-points-badge {
-    display: inline-block;
-    background: #c8a96e; color: #fff;
-    font-size: 0.68rem; letter-spacing: 0.1em;
-    padding: 0.2rem 0.6rem;
-    margin-left: 0.4rem;
-    vertical-align: middle;
-  }
-  .quiz-answered-badge {
-    font-size: 0.65rem; color: var(--muted);
-    letter-spacing: 0.1em; margin-top: 0.5rem;
-  }
-
-  /* ── Scoreboard / Profile ── */
-  .score-bar {
-    background: var(--card-bg);
-    border-bottom: 1px solid var(--border);
-    padding: 0.9rem 2rem;
-    display: none;
-  }
-  .score-bar.visible { display: block; }
-  .score-bar-inner {
-    max-width: 1100px; margin: 0 auto;
-    display: flex; align-items: center; gap: 1.5rem;
-    flex-wrap: wrap;
-  }
-  .score-item {
-    display: flex; align-items: center; gap: 0.5rem;
-    font-size: 0.75rem; letter-spacing: 0.08em; color: var(--muted);
-  }
-  .score-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem; font-weight: 400; color: #c8a96e;
-  }
-  .achievement-list {
-    display: flex; gap: 0.5rem; flex-wrap: wrap;
-  }
-  .achievement-badge {
-    font-size: 0.72rem; letter-spacing: 0.06em;
-    padding: 0.2rem 0.6rem;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    opacity: 0.4;
-  }
-  .achievement-badge.unlocked {
-    border-color: #c8a96e; color: #c8a96e; opacity: 1;
-  }
-  .achievement-toast {
-    position: fixed; top: 2rem; left: 50%;
-    transform: translateX(-50%) translateY(-3rem);
-    background: #c8a96e; color: #fff;
-    padding: 0.8rem 1.8rem;
-    font-size: 0.82rem; letter-spacing: 0.1em;
-    z-index: 800; opacity: 0;
-    transition: all 0.4s;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .achievement-toast.show {
-    opacity: 1; transform: translateX(-50%) translateY(0);
-  }
 
   /* ── Related cards ── */
   .related-section {
@@ -1191,63 +1042,6 @@
   .related-item::before { content: '"'; margin-right: 0.2em; }
 
 
-  .quiz-action-row {
-    display: flex; gap: 0.6rem; justify-content: center;
-    margin-top: 0.8rem;
-  }
-  .quiz-next-btn {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.78rem; letter-spacing: 0.1em;
-    padding: 0.55rem 1.5rem;
-    border: 1px solid var(--text);
-    background: var(--text); color: var(--bg);
-    cursor: pointer; transition: background 0.2s;
-  }
-  .quiz-next-btn:hover { background: #333; }
-  .quiz-retry-btn {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.78rem; letter-spacing: 0.1em;
-    padding: 0.55rem 1.5rem;
-    border: 1px solid var(--border);
-    background: transparent; color: var(--muted);
-    cursor: pointer; transition: all 0.2s;
-  }
-  .quiz-retry-btn:hover { border-color: var(--text); color: var(--text); }
-  .quiz-streak-now {
-    font-size: 0.72rem; letter-spacing: 0.1em;
-    color: #c8a96e; margin-top: 0.5rem;
-    min-height: 1.2rem;
-  }
-
-
-  .achievement-current {
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    padding: 0.22rem 0.7rem;
-    border: 1px solid #c8a96e;
-    color: #c8a96e;
-  }
-  .achievement-next {
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    padding: 0.22rem 0.7rem;
-    border: 1px solid var(--border);
-    color: #ccc;
-    opacity: 0.55;
-  }
-  .achievement-none {
-    font-size: 0.72rem;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    font-style: italic;
-  }
-  /* achievement toast upgrade */
-  .achievement-toast {
-    font-size: 0.88rem !important;
-    padding: 1rem 2rem !important;
-    line-height: 1.6;
-    text-align: center;
-  }
   @media (max-width: 600px) { .submit-fields { grid-template-columns: 1fr; } }
   .submit-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.5rem; }
   .bfield { margin-bottom: 1rem; }
@@ -1919,156 +1713,7 @@
   .dark-toggle:hover { border-color: var(--text); color: var(--text); }
 
 
-  /* ── Quiz button on cards ── */
-  .quiz-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    padding: 0.28rem 0.7rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .quiz-btn:hover { border-color: #c8a96e; color: #c8a96e; }
 
-  /* ── Quiz modal ── */
-  .quiz-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(250,249,247,0.95);
-    backdrop-filter: blur(8px);
-    z-index: 700;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  .quiz-overlay.open { display: flex; }
-  .quiz-modal {
-    background: #fff;
-    border: 1px solid var(--border);
-    padding: 2.5rem 2rem 2rem;
-    width: 100%;
-    max-width: 520px;
-    box-shadow: 0 16px 64px rgba(0,0,0,0.1);
-    position: relative;
-    text-align: center;
-  }
-  body.dark .quiz-modal { background: #222224; }
-  .quiz-close {
-    position: absolute; top: 1rem; right: 1rem;
-    background: none; border: none; font-size: 1.1rem;
-    cursor: pointer; color: var(--muted); padding: 0.3rem;
-  }
-  .quiz-close:hover { color: var(--text); }
-  .quiz-label {
-    font-size: 0.65rem; letter-spacing: 0.2em;
-    text-transform: uppercase; color: #c8a96e;
-    margin-bottom: 1.2rem;
-  }
-  .quiz-question {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem; font-weight: 400;
-    line-height: 1.9; margin-bottom: 1.8rem;
-    letter-spacing: 0.04em;
-  }
-  .quiz-blank {
-    display: inline-block;
-    border-bottom: 2px solid #c8a96e;
-    min-width: 80px; width: auto;
-    color: #c8a96e; font-style: italic;
-  }
-  .quiz-input {
-    width: 100%; padding: 0.6rem 0;
-    font-family: 'Noto Serif TC', serif;
-    font-size: 1rem; font-weight: 300;
-    background: transparent; border: none;
-    border-bottom: 1px solid var(--border);
-    color: var(--text); outline: none;
-    text-align: center; letter-spacing: 0.1em;
-    transition: border-color 0.2s;
-    margin-bottom: 1.5rem;
-  }
-  .quiz-input:focus { border-bottom-color: #c8a96e; }
-  .quiz-result {
-    font-size: 0.85rem; line-height: 1.8;
-    margin-bottom: 1.5rem; min-height: 2rem;
-  }
-  .quiz-result.correct { color: #5a9e6f; }
-  .quiz-result.wrong   { color: #c44; }
-  .quiz-submit {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 0.78rem; letter-spacing: 0.1em;
-    padding: 0.55rem 1.8rem;
-    border: 1px solid var(--text);
-    background: var(--text); color: var(--bg);
-    cursor: pointer; transition: background 0.2s;
-  }
-  .quiz-submit:hover { background: #333; }
-  .quiz-submit:disabled { opacity: 0.4; cursor: not-allowed; }
-  .quiz-points-badge {
-    display: inline-block;
-    background: #c8a96e; color: #fff;
-    font-size: 0.68rem; letter-spacing: 0.1em;
-    padding: 0.2rem 0.6rem;
-    margin-left: 0.4rem;
-    vertical-align: middle;
-  }
-  .quiz-answered-badge {
-    font-size: 0.65rem; color: var(--muted);
-    letter-spacing: 0.1em; margin-top: 0.5rem;
-  }
-
-  /* ── Scoreboard / Profile ── */
-  .score-bar {
-    background: var(--card-bg);
-    border-bottom: 1px solid var(--border);
-    padding: 0.9rem 2rem;
-    display: none;
-  }
-  .score-bar.visible { display: block; }
-  .score-bar-inner {
-    max-width: 1100px; margin: 0 auto;
-    display: flex; align-items: center; gap: 1.5rem;
-    flex-wrap: wrap;
-  }
-  .score-item {
-    display: flex; align-items: center; gap: 0.5rem;
-    font-size: 0.75rem; letter-spacing: 0.08em; color: var(--muted);
-  }
-  .score-value {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem; font-weight: 400; color: #c8a96e;
-  }
-  .achievement-list {
-    display: flex; gap: 0.5rem; flex-wrap: wrap;
-  }
-  .achievement-badge {
-    font-size: 0.72rem; letter-spacing: 0.06em;
-    padding: 0.2rem 0.6rem;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    opacity: 0.4;
-  }
-  .achievement-badge.unlocked {
-    border-color: #c8a96e; color: #c8a96e; opacity: 1;
-  }
-  .achievement-toast {
-    position: fixed; top: 2rem; left: 50%;
-    transform: translateX(-50%) translateY(-3rem);
-    background: #c8a96e; color: #fff;
-    padding: 0.8rem 1.8rem;
-    font-size: 0.82rem; letter-spacing: 0.1em;
-    z-index: 800; opacity: 0;
-    transition: all 0.4s;
-    pointer-events: none;
-    white-space: nowrap;
-  }
-  .achievement-toast.show {
-    opacity: 1; transform: translateX(-50%) translateY(0);
-  }
 
   /* ── Related cards ── */
   .related-section {
@@ -2102,6 +1747,161 @@
     .bubble { right: auto; left: 50%; transform: translateX(-50%); }
     .bubble::before { right: auto; left: calc(50% - 5px); }
   }
+
+  /* ── Score bar ── */
+  .score-bar {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem;
+    display: none;
+  }
+  .score-bar.visible { display: block; }
+  .score-bar-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+  }
+  .score-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.75rem; letter-spacing: 0.08em; color: var(--muted);
+  }
+  .score-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 400; color: #c8a96e;
+  }
+  .rank-display {
+    font-size: 0.82rem; letter-spacing: 0.08em;
+    color: #c8a96e; font-style: italic;
+  }
+
+  /* ── Quiz button on cards ── */
+  .quiz-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    padding: 0.28rem 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-btn:hover { border-color: #c8a96e; color: #c8a96e; }
+
+  /* ── Quiz modal ── */
+  .quiz-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(250,249,247,0.95);
+    backdrop-filter: blur(8px);
+    z-index: 700;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .quiz-overlay.open { display: flex; }
+  .quiz-modal {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem 2rem;
+    width: 100%;
+    max-width: 540px;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.1);
+    position: relative;
+    text-align: center;
+  }
+  body.dark .quiz-modal { background: #222224; }
+  .quiz-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none; font-size: 1.1rem;
+    cursor: pointer; color: var(--muted); padding: 0.3rem;
+  }
+  .quiz-close:hover { color: var(--text); }
+  .quiz-label {
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    text-transform: uppercase; color: #c8a96e;
+    margin-bottom: 1.2rem;
+  }
+  .quiz-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem; font-weight: 400;
+    line-height: 1.9; margin-bottom: 1.8rem;
+    letter-spacing: 0.04em;
+  }
+  .quiz-blank {
+    display: inline-block;
+    border-bottom: 2px solid #c8a96e;
+    color: #c8a96e; font-style: italic;
+    letter-spacing: 0.2em;
+  }
+  .quiz-input {
+    width: 100%; padding: 0.6rem 0;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1rem; font-weight: 300;
+    background: transparent; border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text); outline: none;
+    text-align: center; letter-spacing: 0.1em;
+    transition: border-color 0.2s;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-input:focus { border-bottom-color: #c8a96e; }
+  .quiz-result {
+    font-size: 0.88rem; line-height: 1.8;
+    margin-bottom: 1.2rem; min-height: 1.6rem;
+  }
+  .quiz-result.correct { color: #5a9e6f; }
+  .quiz-result.wrong   { color: #c44; }
+  .quiz-streak-msg {
+    font-size: 0.75rem; color: #c8a96e;
+    letter-spacing: 0.1em; min-height: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .quiz-submit {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.78rem; letter-spacing: 0.1em;
+    padding: 0.55rem 1.8rem;
+    border: 1px solid var(--text);
+    background: var(--text); color: var(--bg);
+    cursor: pointer; transition: background 0.2s;
+  }
+  .quiz-submit:hover { background: #333; }
+  .quiz-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+  .quiz-action-row {
+    display: flex; gap: 0.8rem; justify-content: center; margin-top: 0.5rem;
+  }
+  .quiz-continue-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.78rem; letter-spacing: 0.1em;
+    padding: 0.55rem 1.5rem;
+    border: 1px solid #5a9e6f; background: #5a9e6f; color: #fff;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .quiz-continue-btn:hover { background: #4a8e5f; }
+  .quiz-retry-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.78rem; letter-spacing: 0.1em;
+    padding: 0.55rem 1.5rem;
+    border: 1px solid var(--border); background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .quiz-retry-btn:hover { border-color: var(--text); color: var(--text); }
+
+  /* ── Achievement toast ── */
+  .achievement-toast {
+    position: fixed; top: 2rem; left: 50%;
+    transform: translateX(-50%) translateY(-3rem);
+    background: #c8a96e; color: #fff;
+    padding: 1rem 2rem;
+    font-size: 0.88rem; letter-spacing: 0.1em;
+    z-index: 800; opacity: 0;
+    transition: all 0.4s;
+    pointer-events: none;
+    text-align: center; line-height: 1.6;
+  }
+  .achievement-toast.show {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+  }
 </style>
 </head>
 <body>
@@ -2125,12 +1925,9 @@
 </header>
 
 
+<!-- Score bar (登入後顯示) -->
 <div class="score-bar" id="scoreBar">
   <div class="score-bar-inner">
-    <div class="score-item">
-      <span>積分</span>
-      <span class="score-value" id="scoreDisplay">0</span>
-    </div>
     <div class="score-item">
       <span>答對</span>
       <span class="score-value" id="correctDisplay">0</span>
@@ -2140,12 +1937,7 @@
       <span class="score-value" id="streakDisplay">0</span>
     </div>
     <div class="score-item" style="flex:1">
-      <div class="achievement-list" id="achievementList">
-        <div class="achievement-badge" data-key="first">🌱 初來乍到</div>
-        <div class="achievement-badge" data-key="ten">🌿 田園常客</div>
-        <div class="achievement-badge" data-key="thirty">🌳 語錄達人</div>
-        <div class="achievement-badge" data-key="master">🏆 田園知己</div>
-      </div>
+      <div id="rankDisplay" class="rank-display"></div>
     </div>
   </div>
 </div>
@@ -2667,7 +2459,7 @@ onAuthStateChanged(auth, user => {
     btn.textContent = '登入';
     btn.classList.remove('logged-in');
     _userFavs = new Set();
-    _userScore = 0; _userCorrect = 0; _userStreak = 0; _userBestStreak = 0; _userAchievements = []; _answeredQuizzes = {};
+    _userCorrect = 0; _userStreak = 0; _userBestStreak = 0; _userRank = ''; _answeredThisSession = new Set();
     renderScoreBar();
     renderGrid();
   }
@@ -2812,300 +2604,8 @@ async function loadMemberList() {
 
 
 
-// ── Achievements config ──
-const ACHIEVEMENTS = [
-  { key: 's5',  label: '⚡ 初露鋒芒',  threshold: 5  },
-  { key: 's10', label: '🔥 連勝高手',  threshold: 10 },
-  { key: 's15', label: '🎯 精準射手',  threshold: 15 },
-  { key: 's20', label: '💎 田園老饕',  threshold: 20 },
-  { key: 's30', label: '🌙 過目不忘',  threshold: 30 },
-  { key: 's50', label: '👑 語錄之神',  threshold: 50 },
-];
 
-// ── Score state ──
-let _userScore    = 0;
-let _userCorrect  = 0;
-let _userStreak   = 0;  // current consecutive correct streak
-let _userBestStreak = 0;
-let _sessionStreak = 0;  // streak within current session (resets on wrong or page reload)
-let _userAchievements = [];  // array of unlocked keys
-let _answeredQuizzes  = {};  // docId -> 'correct'|'wrong'
 
-async function loadUserScore(uid) {
-  try {
-    const { getDoc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    const ref = doc(db, 'users', uid, 'gamedata', 'score');
-    const snap = await getDoc(ref);
-    if (snap.exists()) {
-      const d = snap.data();
-      _userScore        = d.score        || 0;
-      _userCorrect      = d.correct      || 0;
-      _userStreak       = d.streak       || 0;
-      _userBestStreak   = d.bestStreak   || 0;
-      _userAchievements = d.achievements || [];
-      _answeredQuizzes  = d.answered     || {};
-    }
-    renderScoreBar();
-  } catch(e) { console.error('loadUserScore', e); }
-}
-
-async function saveUserScore(uid) {
-  try {
-    const { setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    await setDoc(doc(db, 'users', uid, 'gamedata', 'score'), {
-      score: _userScore,
-      correct: _userCorrect,
-      streak: _userStreak,
-      bestStreak: _userBestStreak,
-      achievements: _userAchievements,
-      answered: _answeredQuizzes
-    });
-  } catch(e) { console.error('saveUserScore', e); }
-}
-
-function renderScoreBar() {
-  const bar = document.getElementById('scoreBar');
-  if (!currentUserPublic) { bar.classList.remove('visible'); return; }
-  bar.classList.add('visible');
-  document.getElementById('scoreDisplay').textContent   = _userScore;
-  document.getElementById('correctDisplay').textContent = _userCorrect;
-  const streakEl = document.getElementById('streakDisplay');
-  if (streakEl) streakEl.textContent = _userBestStreak;
-
-  // Show only current achievement + next one
-  const listEl = document.getElementById('achievementList');
-  if (!listEl) return;
-
-  // Find highest unlocked
-  const unlocked = ACHIEVEMENTS.filter(a => _userAchievements.includes(a.key));
-  const current  = unlocked.length ? unlocked[unlocked.length - 1] : null;
-
-  // Find next (first not yet unlocked)
-  const lockedIdx = ACHIEVEMENTS.findIndex(a => !_userAchievements.includes(a.key));
-  const next = lockedIdx >= 0 ? ACHIEVEMENTS[lockedIdx] : null;
-
-  let html = '';
-  if (current) {
-    html += '<span class="achievement-current">' + current.label + '</span>';
-  }
-  if (next) {
-    const needed = next.threshold - _userBestStreak;
-    html += ' <span class="achievement-next">' + next.label + '</span>';
-    if (needed > 0) html += ' <span style="font-size:0.65rem;color:var(--muted);letter-spacing:0.06em">再連勝 ' + needed + ' 題解鎖</span>';
-  }
-  if (!current && !next) {
-    html = '<span class="achievement-current">👑 語錄之神 — 全成就達成！</span>';
-  }
-  if (!current && next) {
-    html += ' <span style="font-size:0.65rem;color:var(--muted);letter-spacing:0.06em">連勝 ' + next.threshold + ' 題可解鎖</span>';
-  }
-  listEl.innerHTML = html;
-}
-
-function checkAchievements() {
-  let newUnlocks = [];
-  ACHIEVEMENTS.forEach(a => {
-    if (!_userAchievements.includes(a.key) && _userBestStreak >= a.threshold) {
-      _userAchievements.push(a.key);
-      newUnlocks.push(a);
-    }
-  });
-  newUnlocks.forEach((a, i) => {
-    setTimeout(() => showAchievementToast(a), i * 2800);
-  });
-}
-
-function showAchievementToast(achievement) {
-  const el = document.getElementById('achievementToast');
-  el.innerHTML = '🎉 恭喜獲得新稱號<br><strong>' + achievement.label + '</strong>';
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3000);
-}
-
-// ── Quiz logic ──
-let _quizDocId   = null;
-let _quizAnswer  = null;
-let _quizDone    = false;
-
-function generateBlank(text) {
-  const totalLen = text.replace(/\s/g, '').length;
-  const segments = [];
-
-  // Chinese chunks of 2-4 chars
-  const chineseMatches = [...text.matchAll(/[\u4e00-\u9fff]{2,4}/g)];
-  chineseMatches.forEach(m => segments.push({ start: m.index, end: m.index + m[0].length, word: m[0] }));
-
-  // English words 3+ chars
-  const engMatches = [...text.matchAll(/[a-zA-Z]{3,}/g)];
-  engMatches.forEach(m => segments.push({ start: m.index, end: m.index + m[0].length, word: m[0] }));
-
-  if (!segments.length) return null;
-
-  // For short texts: blank at most 1 char; otherwise blank at most 40% of total
-  const maxBlankLen = totalLen <= 4 ? 1 : Math.floor(totalLen * 0.4);
-  const safe = segments.filter(s => s.word.length <= maxBlankLen);
-  const pool = safe.length ? safe : segments.slice().sort((a,b) => a.word.length - b.word.length);
-
-  // Prefer segments not at the very start or end
-  const mid = pool.filter(s => s.start > 0 && s.end < text.length);
-  const finalPool = mid.length ? mid : pool;
-  const chosen = finalPool[Math.floor(Math.random() * finalPool.length)];
-
-  const before = text.slice(0, chosen.start);
-  const after  = text.slice(chosen.end);
-  // Underscores match exact word length
-  const blanks = '\uff3f'.repeat(chosen.word.length);
-  return { before, after, answer: chosen.word, blanks };
-}
-
-window.openQuiz = function(docId) {
-  if (!currentUserPublic) { openLoginPrompt(docId); return; }
-  // Reset session UI state
-  document.getElementById('quizNextBtn').style.display = 'none';
-  document.getElementById('quizRetryBtn').style.display = 'none';
-  document.getElementById('quizSubmitBtn').style.display = 'inline-block';
-  const q = quotes.find(x => x.docId === docId);
-  if (!q) return;
-
-  const blank = generateBlank(q.text);
-  if (!blank) { showToast('這句太短，無法出題'); return; }
-
-  _quizDocId  = docId;
-  _quizAnswer = blank.answer;
-  _quizDone   = !!_answeredQuizzes[docId];
-
-  // Render question
-  const qEl = document.getElementById('quizQuestion');
-  qEl.innerHTML = escHtml(blank.before) +
-    '<span class="quiz-blank">' + blank.blanks + '</span>' +
-    escHtml(blank.after);
-
-  const input      = document.getElementById('quizInput');
-  const resultEl   = document.getElementById('quizResult');
-  const submitBtn  = document.getElementById('quizSubmitBtn');
-  const answeredBadge = document.getElementById('quizAnsweredBadge');
-
-  input.value = '';
-  resultEl.textContent = '';
-  resultEl.className = 'quiz-result';
-  document.getElementById('quizStreakNow').textContent = '';
-  document.getElementById('quizSubmitBtn').style.display = 'inline-block';
-  document.getElementById('quizActionRow').style.display = 'none';
-  document.getElementById('quizNextBtn').style.display = 'none';
-  document.getElementById('quizRetryBtn').style.display = 'none';
-
-  if (_quizDone) {
-    const prev = _answeredQuizzes[docId];
-    input.value = prev === 'correct' ? _quizAnswer : '';
-    input.disabled = true;
-    submitBtn.disabled = true;
-    answeredBadge.style.display = 'block';
-    if (prev === 'correct') {
-      resultEl.textContent = '✓ 答對了！答案是「' + _quizAnswer + '」';
-      resultEl.className = 'quiz-result correct';
-    } else {
-      resultEl.textContent = '✗ 答錯了，答案是「' + _quizAnswer + '」';
-      resultEl.className = 'quiz-result wrong';
-    }
-  } else {
-    input.disabled = false;
-    submitBtn.disabled = false;
-    answeredBadge.style.display = 'none';
-  }
-
-  document.getElementById('quizOverlay').classList.add('open');
-  if (!_quizDone) setTimeout(() => input.focus(), 100);
-};
-
-window.closeQuiz = function() {
-  document.getElementById('quizOverlay').classList.remove('open');
-};
-
-window.nextQuiz = function() {
-  // Pick random unanswered quote
-  const unanswered = quotes.filter(q => !_answeredQuizzes[q.docId]);
-  const pool = unanswered.length ? unanswered : quotes;
-  const q = pool[Math.floor(Math.random() * pool.length)];
-  openQuiz(q.docId);
-};
-
-window.retryQuiz = function() {
-  // Pick a different wrong/unanswered quote
-  const pool = quotes.filter(q => _answeredQuizzes[q.docId] !== 'correct');
-  const q = pool.length ? pool[Math.floor(Math.random() * pool.length)] : quotes[Math.floor(Math.random() * quotes.length)];
-  openQuiz(q.docId);
-};
-
-window.submitQuizAnswer = async function() {
-  if (_quizDone) return;
-  const input     = document.getElementById('quizInput');
-  const resultEl  = document.getElementById('quizResult');
-  const submitBtn = document.getElementById('quizSubmitBtn');
-  const userAns   = input.value.trim();
-  if (!userAns) { showToast('請填寫答案'); return; }
-
-  const correct = userAns === _quizAnswer ||
-    userAns.toLowerCase() === _quizAnswer.toLowerCase();
-
-  _quizDone = true;
-  input.disabled = true;
-  submitBtn.disabled = true;
-  document.getElementById('quizAnsweredBadge').style.display = 'block';
-
-  if (correct) {
-    _sessionStreak += 1;
-    _userStreak    += 1;
-    if (_userStreak > _userBestStreak) _userBestStreak = _userStreak;
-    const points = 10 + (_userStreak > 1 ? (_userStreak - 1) * 2 : 0);
-    _userScore   += points;
-    _userCorrect += 1;
-    _answeredQuizzes[_quizDocId] = 'correct';
-    const bonus = _userStreak > 1 ? ' <span class="quiz-points-badge">🔥 連勝 x' + _userStreak + '</span>' : '';
-    resultEl.innerHTML = '✓ 答對了！<span class="quiz-points-badge">+' + points + ' 分</span>' + bonus;
-    resultEl.className = 'quiz-result correct';
-    checkAchievements();
-    // Show next button
-    document.getElementById('quizNextBtn').style.display = 'inline-block';
-    document.getElementById('quizRetryBtn').style.display = 'none';
-  } else {
-    _sessionStreak = 0; // reset session streak on wrong
-    _userStreak    = 0;
-    _answeredQuizzes[_quizDocId] = 'wrong';
-    resultEl.textContent = '✗ 答錯了，答案是「' + _quizAnswer + '」';
-    resultEl.className = 'quiz-result wrong';
-    // Show retry button
-    document.getElementById('quizRetryBtn').style.display = 'inline-block';
-    document.getElementById('quizNextBtn').style.display = 'none';
-  }
-
-  document.getElementById('quizSubmitBtn').style.display = 'none';
-  renderScoreBar();
-  if (currentUserPublic) saveUserScore(currentUserPublic.uid);
-};
-
-// ── Next / Retry ──
-window.quizNext = function() {
-  // Pick random unanswered quote
-  const unanswered = quotes.filter(q => !_answeredQuizzes[q.docId]);
-  const pool = unanswered.length ? unanswered : quotes;
-  const q = pool[Math.floor(Math.random() * pool.length)];
-  // Reset buttons
-  document.getElementById('quizNextBtn').style.display = 'none';
-  document.getElementById('quizRetryBtn').style.display = 'none';
-  document.getElementById('quizSubmitBtn').style.display = 'inline-block';
-  openQuiz(q.docId);
-};
-
-window.quizRetry = function() {
-  // Re-open same question fresh (allow re-answer since wrong)
-  const docId = _quizDocId;
-  // Remove from answered so they can try again
-  delete _answeredQuizzes[docId];
-  document.getElementById('quizNextBtn').style.display = 'none';
-  document.getElementById('quizRetryBtn').style.display = 'none';
-  document.getElementById('quizSubmitBtn').style.display = 'inline-block';
-  openQuiz(docId);
-};
 
 // ── Related cards ──
 function renderRelated(docId) {
@@ -3180,19 +2680,6 @@ function closeLoginPrompt() {
 }
 window.openLoginPrompt  = openLoginPrompt;
 
-// ── Quiz entry from header button ──
-window.openQuizEntry = function() {
-  if (!currentUserPublic) {
-    openLoginPrompt(null);
-    return;
-  }
-  // Pick a random unanswered quote, fallback to any
-  const unanswered = quotes.filter(q => !_answeredQuizzes[q.docId]);
-  const pool = unanswered.length ? unanswered : quotes;
-  if (!pool.length) { showToast('目前沒有可出題的金句'); return; }
-  const q = pool[Math.floor(Math.random() * pool.length)];
-  openQuiz(q.docId);
-};
 window.closeLoginPrompt = closeLoginPrompt;
 
 window.loginAndFav = async function() {
@@ -3328,6 +2815,224 @@ window.downloadStory = function() {
   const a = document.createElement('a'); a.href = _shareDataUrl; a.download = '田園語錄_限時動態.png'; a.click();
 };
 
+// ── Ranks config ──
+const RANKS = [
+  { threshold: 0,  label: '🌱 初來乍到' },
+  { threshold: 10, label: '🌿 田園常客' },
+  { threshold: 20, label: '🌳 語錄達人' },
+  { threshold: 30, label: '🔥 連勝高手' },
+  { threshold: 40, label: '💎 田園老饕' },
+  { threshold: 50, label: '👑 語錄之神' },
+];
+function getRank(bestStreak) {
+  let rank = RANKS[0];
+  for (const r of RANKS) { if (bestStreak >= r.threshold) rank = r; }
+  return rank.label;
+}
+
+// ── Quiz state ──
+let _userCorrect    = 0;
+let _userStreak     = 0;
+let _userBestStreak = 0;
+let _userRank       = '';
+let _answeredThisSession = new Set(); // docIds answered this session
+let _quizDocId  = null;
+let _quizAnswer = null;
+let _quizDone   = false;
+
+async function loadUserScore(uid) {
+  try {
+    const { getDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const snap = await getDoc(doc(db, 'users', uid, 'gamedata', 'score'));
+    if (snap.exists()) {
+      const d = snap.data();
+      _userCorrect    = d.correct     || 0;
+      _userBestStreak = d.bestStreak  || 0;
+      _userRank       = d.rank        || getRank(_userBestStreak);
+    } else {
+      // 新使用者，直接初始化為初始稱號，不觸發升級提示
+      _userRank = getRank(0);
+    }
+    renderScoreBar();
+  } catch(e) { console.error('loadUserScore', e); }
+}
+
+async function saveUserScore(uid) {
+  try {
+    const { setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await setDoc(doc(db, 'users', uid, 'gamedata', 'score'), {
+      correct: _userCorrect,
+      bestStreak: _userBestStreak,
+      rank: getRank(_userBestStreak)
+    });
+  } catch(e) { console.error('saveUserScore', e); }
+}
+
+function renderScoreBar() {
+  const bar = document.getElementById('scoreBar');
+  if (!currentUserPublic) { bar.classList.remove('visible'); return; }
+  bar.classList.add('visible');
+  document.getElementById('correctDisplay').textContent = _userCorrect;
+  document.getElementById('streakDisplay').textContent  = _userBestStreak;
+  document.getElementById('rankDisplay').textContent    = getRank(_userBestStreak);
+}
+
+// ── Generate blank ──
+function generateBlanks(text) {
+  const cleaned = text.replace(/\s/g, '');
+  const isShort = cleaned.length < 5;
+  const targetCount = isShort ? (cleaned.length >= 2 ? 1 : 1) : (cleaned.length <= 8 ? 2 : 3);
+
+  // Find all Chinese word segments (2-4 chars) and English words (3+ chars)
+  const segments = [];
+  for (const m of text.matchAll(/[\u4e00-\u9fff]{2,4}/g)) {
+    segments.push({ start: m.index, end: m.index + m[0].length, word: m[0] });
+  }
+  for (const m of text.matchAll(/[a-zA-Z]{3,}/g)) {
+    segments.push({ start: m.index, end: m.index + m[0].length, word: m[0] });
+  }
+  if (!segments.length) return null;
+
+  // Sort by start, pick non-overlapping ones
+  segments.sort((a, b) => a.start - b.start);
+  const chosen = [];
+  for (const seg of segments) {
+    if (chosen.length >= targetCount) break;
+    const overlaps = chosen.some(c => seg.start < c.end && seg.end > c.start);
+    if (!overlaps) chosen.push(seg);
+  }
+  if (!chosen.length) return null;
+
+  // Build display string with blanks and collect answers
+  let result = '';
+  let prev = 0;
+  const answers = [];
+  for (const seg of chosen) {
+    result += escHtml(text.slice(prev, seg.start));
+    const blanks = '＿'.repeat(seg.word.length);
+    result += `<span class="quiz-blank">${blanks}</span>`;
+    answers.push(seg.word);
+    prev = seg.end;
+  }
+  result += escHtml(text.slice(prev));
+  return { html: result, answers };
+}
+
+window.openQuizEntry = function() {
+  if (!currentUserPublic) { openLoginPrompt(null); return; }
+  const pool = quotes.filter(q => !_answeredThisSession.has(q.docId));
+  const src  = pool.length ? pool : quotes;
+  if (!src.length) { showToast('目前沒有可出題的金句'); return; }
+  const q = src[Math.floor(Math.random() * src.length)];
+  openQuiz(q.docId);
+};
+
+window.openQuiz = function(docId) {
+  if (!currentUserPublic) { openLoginPrompt(docId); return; }
+  const q = quotes.find(x => x.docId === docId);
+  if (!q) return;
+  const blank = generateBlanks(q.text);
+  if (!blank) { showToast('這句太短，無法出題'); return; }
+
+  _quizDocId  = docId;
+  _quizAnswer = blank.answers;
+  _quizDone   = false;
+
+  document.getElementById('quizQuestion').innerHTML = blank.html;
+  const input = document.getElementById('quizInput');
+  input.value = ''; input.disabled = false;
+  document.getElementById('quizResult').textContent = '';
+  document.getElementById('quizResult').className = 'quiz-result';
+  document.getElementById('quizStreakMsg').textContent = '';
+  document.getElementById('quizSubmitBtn').style.display = 'inline-block';
+  document.getElementById('quizSubmitBtn').disabled = false;
+  document.getElementById('quizContinueBtn').style.display = 'none';
+  document.getElementById('quizRetryBtn').style.display = 'none';
+
+  // Show hint: how many blanks
+  const hintEl = document.getElementById('quizHint');
+  if (blank.answers.length > 1) {
+    hintEl.textContent = `共 ${blank.answers.length} 個空格，請用頓號「、」分隔答案`;
+  } else {
+    hintEl.textContent = '';
+  }
+
+  document.getElementById('quizOverlay').classList.add('open');
+  setTimeout(() => input.focus(), 100);
+};
+
+window.closeQuiz = function() {
+  document.getElementById('quizOverlay').classList.remove('open');
+};
+
+window.submitQuizAnswer = async function() {
+  if (_quizDone) return;
+  const input    = document.getElementById('quizInput');
+  const resultEl = document.getElementById('quizResult');
+  const userAns  = input.value.trim();
+  if (!userAns) { showToast('請填寫答案'); return; }
+
+  // Split user answer by common separators
+  const userParts = userAns.split(/[、,，\s]+/).map(s => s.trim()).filter(Boolean);
+  const correct = _quizAnswer.every((ans, i) => {
+    const u = userParts[i] || '';
+    return u === ans || u.toLowerCase() === ans.toLowerCase();
+  });
+
+  _quizDone = true;
+  _answeredThisSession.add(_quizDocId);
+  input.disabled = true;
+  document.getElementById('quizSubmitBtn').style.display = 'none';
+
+  if (correct) {
+    _userStreak   += 1;
+    _userCorrect  += 1;
+    if (_userStreak > _userBestStreak) _userBestStreak = _userStreak;
+    resultEl.textContent = '✓ 答對了！答案是「' + _quizAnswer.join('、') + '」';
+    resultEl.className = 'quiz-result correct';
+    // Show streak message
+    if (_userStreak >= 2) {
+      document.getElementById('quizStreakMsg').textContent = `🔥 連勝 ${_userStreak} 題！`;
+    }
+    // Check rank upgrade
+    const newRank = getRank(_userBestStreak);
+    if (newRank !== _userRank) {
+      _userRank = newRank;
+      showAchievementToast(newRank);
+    }
+    document.getElementById('quizContinueBtn').style.display = 'inline-block';
+  } else {
+    _userStreak = 0;
+    resultEl.textContent = '✗ 答錯了，答案是「' + _quizAnswer.join('、') + '」';
+    resultEl.className = 'quiz-result wrong';
+    document.getElementById('quizRetryBtn').style.display = 'inline-block';
+  }
+
+  renderScoreBar();
+  if (currentUserPublic) saveUserScore(currentUserPublic.uid);
+};
+
+window.quizContinue = function() {
+  // Pick next unanswered quote
+  const pool = quotes.filter(q => !_answeredThisSession.has(q.docId));
+  const src  = pool.length ? pool : quotes;
+  const q = src[Math.floor(Math.random() * src.length)];
+  openQuiz(q.docId);
+};
+
+window.quizRetry = function() {
+  // Retry same quote
+  _answeredThisSession.delete(_quizDocId);
+  openQuiz(_quizDocId);
+};
+
+function showAchievementToast(rankLabel) {
+  const el = document.getElementById('achievementToast');
+  el.innerHTML = `🎉 恭喜升級新稱號<br><strong>${rankLabel}</strong>`;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+
 // ── Back to top ──
 window.addEventListener('scroll', () => {
   const btn = document.getElementById('backTop');
@@ -3379,29 +3084,27 @@ listenQuotes();
   </div>
 </div>
 
-
 <!-- Quiz modal -->
 <div class="quiz-overlay" id="quizOverlay">
   <div class="quiz-modal">
     <button class="quiz-close" onclick="closeQuiz()">✕</button>
     <div class="quiz-label">田園填空挑戰</div>
     <div class="quiz-question" id="quizQuestion"></div>
-    <input type="text" class="quiz-input" id="quizInput" placeholder="填入答案..." autocomplete="off"
+    <div id="quizHint" style="font-size:0.7rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:0.8rem;"></div>
+    <input type="text" class="quiz-input" id="quizInput" placeholder="填入答案…" autocomplete="off"
       onkeydown="if(event.key==='Enter')submitQuizAnswer()">
     <div class="quiz-result" id="quizResult"></div>
-    <div class="quiz-streak-now" id="quizStreakNow"></div>
+    <div class="quiz-streak-msg" id="quizStreakMsg"></div>
     <button class="quiz-submit" id="quizSubmitBtn" onclick="submitQuizAnswer()">送出答案</button>
-    <div style="display:flex;gap:0.8rem;justify-content:center;margin-top:0.5rem">
-      <button class="quiz-submit" id="quizNextBtn" onclick="quizNext()" style="display:none;background:#5a9e6f;border-color:#5a9e6f">下一題 →</button>
-      <button class="quiz-submit" id="quizRetryBtn" onclick="quizRetry()" style="display:none;background:#888;border-color:#888">重新開始</button>
+    <div class="quiz-action-row">
+      <button class="quiz-continue-btn" id="quizContinueBtn" onclick="quizContinue()" style="display:none">繼續作答 →</button>
+      <button class="quiz-retry-btn" id="quizRetryBtn" onclick="quizRetry()" style="display:none">重新開始</button>
     </div>
-    <div class="quiz-answered-badge" id="quizAnsweredBadge" style="display:none">你已經答過這題了</div>
   </div>
 </div>
 
 <!-- Achievement toast -->
 <div class="achievement-toast" id="achievementToast"></div>
-
 
 </body>
 </html>
