@@ -1,0 +1,2696 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>田園語錄</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf9f7;
+    --text: #1a1a1a;
+    --muted: #888;
+    --border: #e8e4df;
+    --card-bg: #ffffff;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Serif TC', serif;
+    min-height: 100vh;
+    font-weight: 300;
+  }
+
+  /* ── Header ── */
+  header {
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .site-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+  }
+
+  .site-sub {
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .header-actions {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 2rem;
+  }
+  .submit-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    padding: 0.5rem 1.2rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .submit-btn:hover { border-color: var(--text); color: var(--text); }
+
+  /* ── Featured ── */
+  .featured {
+    max-width: 680px;
+    margin: 4rem auto 3rem;
+    padding: 0 2rem;
+    text-align: center;
+    animation: fadeUp 0.8s ease both;
+  }
+  .featured-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1.8rem;
+  }
+  .featured-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 300;
+    line-height: 1.7;
+    font-style: italic;
+  }
+  .featured-quote::before { content: '\201C'; margin-right: 0.05em; }
+  .featured-quote::after  { content: '\201D'; margin-left: 0.05em; }
+  .featured-meta {
+    margin-top: 1.2rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .featured-actions {
+    margin-top: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .refresh-btn {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem 0;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+    font-family: inherit;
+  }
+  .refresh-btn:hover { color: var(--text); border-bottom-color: var(--text); }
+
+  /* ── Action buttons (like / comment) ── */
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .action-btn:hover:not(.liked) { border-color: #e88; color: #c44; }
+  .action-btn.liked { border-color: #e88; color: #c44; }
+  .action-btn .icon { font-size: 0.95rem; transition: transform 0.15s; display: inline-block; }
+  .action-btn:not(.liked):hover .icon { transform: scale(1.2); }
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.5); }
+    70%  { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
+  .action-btn.pop .icon { animation: pop 0.35s ease; }
+
+  /* comment toggle btn */
+  .comment-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .comment-btn:hover, .comment-btn.open { border-color: var(--text); color: var(--text); }
+
+  /* ── Divider ── */
+  .divider {
+    max-width: 680px;
+    margin: 0 auto 3rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Grid ── */
+  .grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.25s;
+    animation: fadeUp 0.6s ease both;
+  }
+  .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.07); }
+
+  .card-body { padding: 2rem 1.8rem 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+
+  .card-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.18rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  .card-quote::before {
+    content: '\201C';
+    color: var(--muted);
+    font-size: 1.4em;
+    line-height: 0;
+    vertical-align: -0.3em;
+    margin-right: 0.1em;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+  .card-meta { display: flex; flex-direction: column; gap: 0.2rem; }
+  .card-submitter { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+  .card-date { font-size: 0.68rem; color: #ccc; }
+
+  .card-actions { display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0; }
+
+  /* card action btns — smaller */
+  .card .action-btn,
+  .card .comment-btn {
+    font-size: 0.72rem;
+    padding: 0.22rem 0.6rem;
+  }
+
+  /* ── Comment section ── */
+  .comment-section {
+    display: none;
+    flex-direction: column;
+    border-top: 1px solid var(--border);
+    background: #fdfcfa;
+  }
+  .comment-section.open { display: flex; }
+
+  .comment-list { padding: 1rem 1.4rem 0; display: flex; flex-direction: column; gap: 0.8rem; }
+
+  .comment-item {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text);
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-author { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.2rem; font-style: italic; }
+
+  .comment-empty {
+    padding: 1rem 1.4rem 0;
+    font-size: 0.78rem;
+    color: #bbb;
+    font-style: italic;
+  }
+
+  .comment-form { padding: 0.8rem 1.4rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .comment-form input,
+  .comment-form textarea {
+    width: 100%;
+    padding: 0.45rem 0;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.82rem;
+    font-weight: 300;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+  .comment-form input:focus,
+  .comment-form textarea:focus { border-bottom-color: var(--text); }
+
+  .comment-form input::placeholder,
+  .comment-form textarea::placeholder { color: #ccc; }
+
+  .comment-submit {
+    align-self: flex-end;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0.38rem 0.9rem;
+    border: 1px solid var(--text);
+    background: var(--text);
+    color: var(--bg);
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.2rem;
+  }
+  .comment-submit:hover { background: #333; }
+
+  /* share btn */
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .share-btn:hover { border-color: #a78; color: #8a5; }
+  .card .share-btn { font-size: 0.72rem; padding: 0.22rem 0.6rem; }
+
+  /* share modal */
+  .share-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(250,249,247,0.94);
+    backdrop-filter: blur(6px);
+    z-index: 400;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .share-overlay.open { display: flex; }
+  .share-preview {
+    border: 1px solid var(--border);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.1);
+    max-height: 70vh;
+    width: auto;
+  }
+  .share-hint {
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1.8;
+  }
+  .share-actions { display: flex; gap: 0.8rem; }
+  .share-close {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    background: none; border: none;
+    font-size: 1.2rem; cursor: pointer;
+    color: var(--muted); line-height: 1;
+    padding: 0.3rem;
+  }
+  .share-close:hover { color: var(--text); }
+
+  /* ── Submit Panel ── */
+  .submit-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid transparent;
+    background: #fff;
+  }
+  .submit-panel.open {
+    max-height: 500px;
+    border-bottom-color: var(--border);
+  }
+  .submit-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+  }
+  .submit-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 300;
+    margin-bottom: 1.8rem; letter-spacing: 0.06em;
+    color: var(--text);
+  }
+  .submit-fields { display: grid; grid-template-columns: 1fr 2fr; gap: 0 2rem; }
+
+  /* ── Latest section ── */
+  .latest-section {
+    max-width: 1100px;
+    margin: 0 auto 0;
+    padding: 0 2rem 3rem;
+  }
+  .latest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .latest-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid #c8b8a2;
+    padding: 1.5rem 1.6rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    animation: fadeUp 0.5s ease both;
+  }
+  .latest-card .card-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  .latest-card .card-quote::before {
+    content: '\201C';
+    color: var(--muted);
+    font-size: 1.3em;
+    line-height: 0;
+    vertical-align: -0.3em;
+    margin-right: 0.1em;
+  }
+  .latest-card .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+  .latest-badge {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #b09880;
+    margin-bottom: 0.8rem;
+  }
+
+  /* ── Admin section ── */
+  .admin-footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 2rem 3rem;
+    text-align: center;
+  }
+  .admin-link {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: #ccc;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    transition: color 0.2s;
+  }
+  .admin-link:hover { color: var(--muted); }
+
+  /* Admin panel */
+  .admin-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+    background: #fdfcfa;
+    border-top: 1px solid transparent;
+  }
+  .admin-panel.open {
+    max-height: 2000px;
+    border-top-color: var(--border);
+  }
+  .admin-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 3rem;
+  }
+  .admin-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+  .admin-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Login form */
+  .admin-login { max-width: 320px; margin: 0 auto; }
+  .admin-login .bfield { margin-bottom: 1.2rem; }
+  .admin-login-actions { display: flex; justify-content: flex-end; margin-top: 1.2rem; }
+
+  /* Pending list */
+  .pending-list { display: flex; flex-direction: column; gap: 1rem; }
+  .pending-empty {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #bbb;
+    font-style: italic;
+    padding: 2rem 0;
+  }
+  .pending-item {
+    border: 1px solid var(--border);
+    background: #fff;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .pending-content { flex: 1; }
+  .pending-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+  .pending-meta {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .pending-actions { display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0; }
+  .approve-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 0.38rem 0.9rem;
+    border: 1px solid #8a9;
+    background: #8a9;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .approve-btn:hover { background: #79a; border-color: #79a; }
+  .reject-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 0.38rem 0.9rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reject-btn:hover { border-color: #c88; color: #c44; }
+  .admin-logout {
+    margin-top: 2rem;
+    text-align: right;
+  }
+
+
+  /* ── Sort bar ── */
+  .sort-bar {
+    max-width: 1100px;
+    margin: 0 auto 1.5rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sort-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 0.4rem;
+  }
+  .sort-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0.32rem 0.9rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sort-btn:hover { border-color: var(--text); color: var(--text); }
+  .sort-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* ── Back to top ── */
+  .back-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    background: rgba(26,26,26,0.45);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, background 0.2s;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+    border-radius: 2px;
+  }
+  .back-top.visible { opacity: 1; pointer-events: auto; }
+  .back-top:hover { background: rgba(26,26,26,0.75); }
+
+
+  /* ── Featured comment section ── */
+  .featured-comment-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .featured-comment-section.open { max-height: 800px; }
+  .featured-comment-inner {
+    border: 1px solid var(--border);
+    background: #fff;
+    margin-bottom: 2rem;
+  }
+  .featured-comment-list { padding: 1rem 1.4rem 0; display: flex; flex-direction: column; gap: 0.8rem; }
+  .featured-comment-form { padding: 0.8rem 1.4rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .featured-comment-form input,
+  .featured-comment-form textarea {
+    width: 100%; padding: 0.45rem 0;
+    font-family: 'Noto Serif TC', serif; font-size: 0.82rem; font-weight: 300;
+    background: transparent; border: none; border-bottom: 1px solid var(--border);
+    color: var(--text); outline: none; transition: border-color 0.2s; resize: none;
+  }
+  .featured-comment-form input:focus,
+  .featured-comment-form textarea:focus { border-bottom-color: var(--text); }
+  .featured-comment-form input::placeholder,
+  .featured-comment-form textarea::placeholder { color: #ccc; }
+  .featured-comment-submit {
+    align-self: flex-end;
+    font-family: 'Noto Serif TC', serif; font-size: 0.72rem; letter-spacing: 0.1em;
+    padding: 0.38rem 0.9rem;
+    border: 1px solid var(--text); background: var(--text); color: var(--bg);
+    cursor: pointer; transition: background 0.2s; margin-top: 0.2rem;
+  }
+  .featured-comment-submit:hover { background: #333; }
+
+
+  /* ── Edit modal ── */
+  .edit-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(250,249,247,0.96);
+    backdrop-filter: blur(6px);
+    z-index: 600;
+    align-items: center;
+    justify-content: center;
+  }
+  .edit-overlay.open { display: flex; }
+  .edit-modal {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.1);
+    position: relative;
+  }
+  .edit-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.04em;
+  }
+  .edit-modal-sub {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.8rem;
+    text-transform: uppercase;
+  }
+  .edit-modal .bfield { margin-bottom: 1.2rem; }
+  .edit-modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.5rem; }
+  .edit-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none; border: none;
+    font-size: 1.1rem; cursor: pointer;
+    color: var(--muted); padding: 0.3rem;
+  }
+  .edit-close:hover { color: var(--text); }
+  .edit-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid #8ab;
+    background: transparent;
+    color: #8ab;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .edit-btn:hover { background: #8ab; color: #fff; border-color: #8ab; }
+
+
+  /* ── User auth ── */
+  .user-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0.38rem 1rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .user-btn:hover { border-color: var(--text); color: var(--text); }
+  .user-btn.logged-in { border-color: #8ab; color: #8ab; }
+  .user-btn.logged-in:hover { background: #8ab; color: #fff; }
+  .user-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    z-index: 400;
+    min-width: 180px;
+    display: none;
+  }
+  .user-menu.open { display: block; }
+  .user-menu-item {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    color: var(--text);
+    transition: background 0.15s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .user-menu-item:hover { background: var(--bg); }
+  .user-menu-item.danger { color: #c44; }
+  .user-wrap { position: relative; display: inline-block; }
+
+  /* ── Favorites panel ── */
+  .fav-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+    background: #fdfcfa;
+    border-bottom: 1px solid transparent;
+  }
+  .fav-panel.open {
+    max-height: 1200px;
+    border-bottom-color: var(--border);
+  }
+  .fav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+  }
+  .fav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .fav-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+  }
+  .fav-count {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .fav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .fav-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 3px solid #d4a8c7;
+    padding: 1.3rem 1.4rem 1rem;
+    animation: fadeUp 0.3s ease both;
+  }
+  .fav-card .card-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+  }
+  .fav-card .card-quote::before {
+    content: '"';
+    color: var(--muted);
+    font-size: 1.3em;
+    line-height: 0;
+    vertical-align: -0.3em;
+    margin-right: 0.1em;
+  }
+  .fav-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+  .fav-remove-btn {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: #ccc;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    transition: color 0.2s;
+  }
+  .fav-remove-btn:hover { color: #c44; }
+  .fav-empty {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #bbb;
+    font-style: italic;
+    padding: 2rem 0;
+  }
+  .fav-login-prompt {
+    text-align: center;
+    padding: 2.5rem 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* ── Fav button on cards ── */
+  .fav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #ddd;
+    padding: 0 0.2rem;
+    transition: color 0.2s, transform 0.15s;
+    line-height: 1;
+  }
+  .fav-btn:hover { transform: scale(1.2); }
+  .fav-btn.faved { color: #d4a8c7; }
+
+  /* Admin member table */
+  .member-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin-top: 0.5rem;
+  }
+  .member-table th {
+    text-align: left;
+    letter-spacing: 0.1em;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+  .member-table td {
+    padding: 0.7rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+  }
+  .member-table tr:last-child td { border-bottom: none; }
+  .member-fav-list {
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+
+  /* ── Login prompt modal ── */
+  .login-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(6px);
+    z-index: 700;
+    align-items: center;
+    justify-content: center;
+  }
+  .login-overlay.open { display: flex; }
+  .login-modal {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 2.8rem 2.5rem;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.1);
+    text-align: center;
+    position: relative;
+  }
+  .login-modal-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .login-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.6rem;
+  }
+  .login-modal-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    letter-spacing: 0.04em;
+  }
+  .login-modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none; border: none;
+    font-size: 1.1rem; cursor: pointer;
+    color: var(--muted); padding: 0.3rem;
+  }
+  .login-modal-close:hover { color: var(--text); }
+  .google-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.75rem 1.2rem;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 0.6rem;
+  }
+  .google-login-btn:hover { border-color: var(--text); background: var(--bg); }
+  .google-login-btn .g-icon {
+    width: 18px; height: 18px;
+    background: linear-gradient(135deg, #4285f4 25%, #ea4335 25%, #ea4335 50%, #fbbc05 50%, #fbbc05 75%, #34a853 75%);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+
+  /* ── Dark mode ── */
+  body { transition: background 0.3s, color 0.3s; }
+
+  body.dark {
+    --bg: #18181a;
+    --text: #e8e4df;
+    --muted: #888;
+    --border: #2e2e30;
+    --card-bg: #222224;
+  }
+  body.dark .submit-panel,
+  body.dark .fav-panel,
+  body.dark .admin-panel { background: #1e1e20; }
+  body.dark .featured-comment-inner,
+  body.dark .card,
+  body.dark .latest-card,
+  body.dark .fav-card,
+  body.dark .pending-item,
+  body.dark .edit-modal,
+  body.dark .login-modal,
+  body.dark .user-menu { background: #222224; }
+  body.dark .share-overlay { background: rgba(18,18,20,0.96); }
+  body.dark .bfield input,
+  body.dark .bfield textarea,
+  body.dark .featured-comment-form input,
+  body.dark .featured-comment-form textarea,
+  body.dark .edit-modal input,
+  body.dark .edit-modal textarea { color: var(--text); }
+  body.dark header { border-bottom-color: var(--border); }
+
+  /* Dark mode toggle button */
+  .dark-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--muted);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .dark-toggle:hover { border-color: var(--text); color: var(--text); }
+
+
+
+
+  /* ── Related cards ── */
+  .related-section {
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.4rem 1.2rem;
+    background: var(--bg);
+  }
+  .related-label {
+    font-size: 0.62rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+  .related-grid {
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .related-item {
+    font-size: 0.82rem; line-height: 1.7;
+    color: var(--muted); cursor: pointer;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+  .related-item:hover { color: var(--text); border-bottom-color: var(--border); }
+  .related-item::before { content: '"'; margin-right: 0.2em; }
+
+
+  @media (max-width: 600px) { .submit-fields { grid-template-columns: 1fr; } }
+  .submit-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.5rem; }
+  .bfield { margin-bottom: 1rem; }
+  .bfield label {
+    display: block;
+    font-size: 0.68rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem;
+  }
+  .bfield input, .bfield textarea {
+    width: 100%; padding: 0.5rem 0;
+    font-family: 'Noto Serif TC', serif; font-size: 0.9rem; font-weight: 300;
+    background: transparent; border: none; border-bottom: 1px solid var(--border);
+    color: var(--text); outline: none; transition: border-color 0.2s; resize: none;
+  }
+  .bfield input:focus, .bfield textarea:focus { border-bottom-color: var(--text); }
+  .btn {
+    font-family: 'Noto Serif TC', serif; font-size: 0.75rem; font-weight: 300;
+    letter-spacing: 0.1em; padding: 0.45rem 1rem;
+    border: 1px solid var(--border); background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn:hover { border-color: var(--text); color: var(--text); }
+  .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .btn-primary:hover { background: #333; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%;
+    transform: translateX(-50%) translateY(2rem);
+    background: var(--text); color: var(--bg);
+    padding: 0.7rem 1.5rem; font-size: 0.8rem; letter-spacing: 0.08em;
+    opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 300;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card:nth-child(1) { animation-delay: 0.04s; }
+  .card:nth-child(2) { animation-delay: 0.08s; }
+  .card:nth-child(3) { animation-delay: 0.12s; }
+  .card:nth-child(4) { animation-delay: 0.16s; }
+  .card:nth-child(5) { animation-delay: 0.20s; }
+  .card:nth-child(6) { animation-delay: 0.24s; }
+
+
+  /* ── Latest section ── */
+  .latest-section {
+    max-width: 1100px;
+    margin: 0 auto 0;
+    padding: 0 2rem 3rem;
+  }
+  .latest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .latest-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid #c8b8a2;
+    padding: 1.5rem 1.6rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    animation: fadeUp 0.5s ease both;
+  }
+  .latest-card .card-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  .latest-card .card-quote::before {
+    content: '\201C';
+    color: var(--muted);
+    font-size: 1.3em;
+    line-height: 0;
+    vertical-align: -0.3em;
+    margin-right: 0.1em;
+  }
+  .latest-card .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+  .latest-badge {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #b09880;
+    margin-bottom: 0.8rem;
+  }
+
+  /* ── Admin section ── */
+  .admin-footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 2rem 3rem;
+    text-align: center;
+  }
+  .admin-link {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: #ccc;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: inherit;
+    transition: color 0.2s;
+  }
+  .admin-link:hover { color: var(--muted); }
+
+  /* Admin panel */
+  .admin-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+    background: #fdfcfa;
+    border-top: 1px solid transparent;
+  }
+  .admin-panel.open {
+    max-height: 2000px;
+    border-top-color: var(--border);
+  }
+  .admin-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 3rem;
+  }
+  .admin-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+  .admin-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Login form */
+  .admin-login { max-width: 320px; margin: 0 auto; }
+  .admin-login .bfield { margin-bottom: 1.2rem; }
+  .admin-login-actions { display: flex; justify-content: flex-end; margin-top: 1.2rem; }
+
+  /* Pending list */
+  .pending-list { display: flex; flex-direction: column; gap: 1rem; }
+  .pending-empty {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #bbb;
+    font-style: italic;
+    padding: 2rem 0;
+  }
+  .pending-item {
+    border: 1px solid var(--border);
+    background: #fff;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .pending-content { flex: 1; }
+  .pending-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+  }
+  .pending-meta {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+  .pending-actions { display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0; }
+  .approve-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 0.38rem 0.9rem;
+    border: 1px solid #8a9;
+    background: #8a9;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .approve-btn:hover { background: #79a; border-color: #79a; }
+  .reject-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 0.38rem 0.9rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reject-btn:hover { border-color: #c88; color: #c44; }
+  .admin-logout {
+    margin-top: 2rem;
+    text-align: right;
+  }
+
+
+  /* ── Sort bar ── */
+  .sort-bar {
+    max-width: 1100px;
+    margin: 0 auto 1.5rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sort-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 0.4rem;
+  }
+  .sort-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0.32rem 0.9rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sort-btn:hover { border-color: var(--text); color: var(--text); }
+  .sort-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* ── Back to top ── */
+  .back-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 44px;
+    height: 44px;
+    background: rgba(26,26,26,0.45);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, background 0.2s;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+    border-radius: 2px;
+  }
+  .back-top.visible { opacity: 1; pointer-events: auto; }
+  .back-top:hover { background: rgba(26,26,26,0.75); }
+
+
+  /* ── Featured comment section ── */
+  .featured-comment-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .featured-comment-section.open { max-height: 800px; }
+  .featured-comment-inner {
+    border: 1px solid var(--border);
+    background: #fff;
+    margin-bottom: 2rem;
+  }
+  .featured-comment-list { padding: 1rem 1.4rem 0; display: flex; flex-direction: column; gap: 0.8rem; }
+  .featured-comment-form { padding: 0.8rem 1.4rem 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .featured-comment-form input,
+  .featured-comment-form textarea {
+    width: 100%; padding: 0.45rem 0;
+    font-family: 'Noto Serif TC', serif; font-size: 0.82rem; font-weight: 300;
+    background: transparent; border: none; border-bottom: 1px solid var(--border);
+    color: var(--text); outline: none; transition: border-color 0.2s; resize: none;
+  }
+  .featured-comment-form input:focus,
+  .featured-comment-form textarea:focus { border-bottom-color: var(--text); }
+  .featured-comment-form input::placeholder,
+  .featured-comment-form textarea::placeholder { color: #ccc; }
+  .featured-comment-submit {
+    align-self: flex-end;
+    font-family: 'Noto Serif TC', serif; font-size: 0.72rem; letter-spacing: 0.1em;
+    padding: 0.38rem 0.9rem;
+    border: 1px solid var(--text); background: var(--text); color: var(--bg);
+    cursor: pointer; transition: background 0.2s; margin-top: 0.2rem;
+  }
+  .featured-comment-submit:hover { background: #333; }
+
+
+  /* ── Edit modal ── */
+  .edit-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(250,249,247,0.96);
+    backdrop-filter: blur(6px);
+    z-index: 600;
+    align-items: center;
+    justify-content: center;
+  }
+  .edit-overlay.open { display: flex; }
+  .edit-modal {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.1);
+    position: relative;
+  }
+  .edit-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.04em;
+  }
+  .edit-modal-sub {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 1.8rem;
+    text-transform: uppercase;
+  }
+  .edit-modal .bfield { margin-bottom: 1.2rem; }
+  .edit-modal-actions { display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.5rem; }
+  .edit-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none; border: none;
+    font-size: 1.1rem; cursor: pointer;
+    color: var(--muted); padding: 0.3rem;
+  }
+  .edit-close:hover { color: var(--text); }
+  .edit-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid #8ab;
+    background: transparent;
+    color: #8ab;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .edit-btn:hover { background: #8ab; color: #fff; border-color: #8ab; }
+
+
+  /* ── User auth ── */
+  .user-btn {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    padding: 0.38rem 1rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .user-btn:hover { border-color: var(--text); color: var(--text); }
+  .user-btn.logged-in { border-color: #8ab; color: #8ab; }
+  .user-btn.logged-in:hover { background: #8ab; color: #fff; }
+  .user-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    z-index: 400;
+    min-width: 180px;
+    display: none;
+  }
+  .user-menu.open { display: block; }
+  .user-menu-item {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    color: var(--text);
+    transition: background 0.15s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .user-menu-item:hover { background: var(--bg); }
+  .user-menu-item.danger { color: #c44; }
+  .user-wrap { position: relative; display: inline-block; }
+
+  /* ── Favorites panel ── */
+  .fav-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+    background: #fdfcfa;
+    border-bottom: 1px solid transparent;
+  }
+  .fav-panel.open {
+    max-height: 1200px;
+    border-bottom-color: var(--border);
+  }
+  .fav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+  }
+  .fav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .fav-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+  }
+  .fav-count {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .fav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .fav-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-left: 3px solid #d4a8c7;
+    padding: 1.3rem 1.4rem 1rem;
+    animation: fadeUp 0.3s ease both;
+  }
+  .fav-card .card-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+  }
+  .fav-card .card-quote::before {
+    content: '"';
+    color: var(--muted);
+    font-size: 1.3em;
+    line-height: 0;
+    vertical-align: -0.3em;
+    margin-right: 0.1em;
+  }
+  .fav-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.6rem;
+    border-top: 1px solid var(--border);
+  }
+  .fav-remove-btn {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: #ccc;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    transition: color 0.2s;
+  }
+  .fav-remove-btn:hover { color: #c44; }
+  .fav-empty {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #bbb;
+    font-style: italic;
+    padding: 2rem 0;
+  }
+  .fav-login-prompt {
+    text-align: center;
+    padding: 2.5rem 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* ── Fav button on cards ── */
+  .fav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #ddd;
+    padding: 0 0.2rem;
+    transition: color 0.2s, transform 0.15s;
+    line-height: 1;
+  }
+  .fav-btn:hover { transform: scale(1.2); }
+  .fav-btn.faved { color: #d4a8c7; }
+
+  /* Admin member table */
+  .member-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin-top: 0.5rem;
+  }
+  .member-table th {
+    text-align: left;
+    letter-spacing: 0.1em;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+  .member-table td {
+    padding: 0.7rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+  }
+  .member-table tr:last-child td { border-bottom: none; }
+  .member-fav-list {
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+
+  /* ── Login prompt modal ── */
+  .login-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(6px);
+    z-index: 700;
+    align-items: center;
+    justify-content: center;
+  }
+  .login-overlay.open { display: flex; }
+  .login-modal {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 2.8rem 2.5rem;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 16px 64px rgba(0,0,0,0.1);
+    text-align: center;
+    position: relative;
+  }
+  .login-modal-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .login-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.6rem;
+  }
+  .login-modal-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    letter-spacing: 0.04em;
+  }
+  .login-modal-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none; border: none;
+    font-size: 1.1rem; cursor: pointer;
+    color: var(--muted); padding: 0.3rem;
+  }
+  .login-modal-close:hover { color: var(--text); }
+  .google-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.75rem 1.2rem;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 0.6rem;
+  }
+  .google-login-btn:hover { border-color: var(--text); background: var(--bg); }
+  .google-login-btn .g-icon {
+    width: 18px; height: 18px;
+    background: linear-gradient(135deg, #4285f4 25%, #ea4335 25%, #ea4335 50%, #fbbc05 50%, #fbbc05 75%, #34a853 75%);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+
+  /* ── Dark mode ── */
+  body { transition: background 0.3s, color 0.3s; }
+
+  body.dark {
+    --bg: #18181a;
+    --text: #e8e4df;
+    --muted: #888;
+    --border: #2e2e30;
+    --card-bg: #222224;
+  }
+  body.dark .submit-panel,
+  body.dark .fav-panel,
+  body.dark .admin-panel { background: #1e1e20; }
+  body.dark .featured-comment-inner,
+  body.dark .card,
+  body.dark .latest-card,
+  body.dark .fav-card,
+  body.dark .pending-item,
+  body.dark .edit-modal,
+  body.dark .login-modal,
+  body.dark .user-menu { background: #222224; }
+  body.dark .share-overlay { background: rgba(18,18,20,0.96); }
+  body.dark .bfield input,
+  body.dark .bfield textarea,
+  body.dark .featured-comment-form input,
+  body.dark .featured-comment-form textarea,
+  body.dark .edit-modal input,
+  body.dark .edit-modal textarea { color: var(--text); }
+  body.dark header { border-bottom-color: var(--border); }
+
+  /* Dark mode toggle button */
+  .dark-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--muted);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .dark-toggle:hover { border-color: var(--text); color: var(--text); }
+
+
+
+
+  /* ── Related cards ── */
+  .related-section {
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.4rem 1.2rem;
+    background: var(--bg);
+  }
+  .related-label {
+    font-size: 0.62rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 0.8rem;
+  }
+  .related-grid {
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .related-item {
+    font-size: 0.82rem; line-height: 1.7;
+    color: var(--muted); cursor: pointer;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+  .related-item:hover { color: var(--text); border-bottom-color: var(--border); }
+  .related-item::before { content: '"'; margin-right: 0.2em; }
+
+  @media (max-width: 600px) {
+    .header-actions { position: static; text-align: center; margin-top: 1.2rem; }
+    header { padding-bottom: 1.5rem; }
+    .bubble { right: auto; left: 50%; transform: translateX(-50%); }
+    .bubble::before { right: auto; left: calc(50% - 5px); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-actions" style="display:flex;gap:0.6rem;align-items:center;">
+    <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="深色模式">☽</button>
+    <button class="submit-btn" id="submitToggleBtn" onclick="toggleSubmit()">我要投稿</button>
+    <div class="user-wrap" id="userWrap">
+      <button class="user-btn" id="userBtn" onclick="toggleUserMenu()">登入</button>
+      <div class="user-menu" id="userMenu">
+        <button class="user-menu-item" id="userMenuName" style="font-style:italic;color:var(--muted);cursor:default;pointer-events:none"></button>
+        <button class="user-menu-item" onclick="toggleFavPanel()">☆ 我的收藏</button>
+        <button class="user-menu-item danger" onclick="userSignOut()">登出</button>
+      </div>
+    </div>
+  </div>
+  <div class="site-title">田園語錄</div>
+  <div class="site-sub">田園金句典藏計劃</div>
+</header>
+
+
+<div class="submit-panel" id="submitPanel">
+  <div class="submit-inner">
+    <div class="submit-title">投稿田園金句</div>
+    <div class="submit-fields">
+      <div class="bfield">
+        <label>投稿人</label>
+        <input type="text" id="submitterInput" placeholder="你的名字">
+      </div>
+      <div class="bfield">
+        <label>田園說了什麼？</label>
+        <textarea id="quoteInput" rows="3" placeholder="如實記錄..."></textarea>
+      </div>
+    </div>
+    <div class="submit-actions">
+      <button class="btn" onclick="closeSubmit()">取消</button>
+      <button class="btn btn-primary" onclick="submitQuote()">投稿</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="fav-panel" id="favPanel">
+  <div class="fav-inner">
+    <div class="fav-header">
+      <div class="fav-title">我的收藏</div>
+      <div class="fav-count"><span id="favCount">0</span> 筆</div>
+    </div>
+    <div class="fav-grid" id="favGrid">
+      <div class="fav-login-prompt">請先登入 Google 帳號<br>才能使用收藏功能</div>
+    </div>
+  </div>
+</div>
+
+<section class="featured">
+  <div class="featured-label">今日精選</div>
+  <div class="featured-quote" id="featuredText">載入中…</div>
+  <div class="featured-meta" id="featuredMeta"></div>
+  <div class="featured-actions">
+    <button class="refresh-btn" onclick="showRandom()">換一句 →</button>
+    <button class="action-btn" id="featuredLike" onclick="likeFeatured()">
+      <span class="icon">❤️</span>
+      <span id="featuredLikeCount">0</span>
+    </button>
+    <button class="comment-btn" id="featuredCommentBtn" onclick="toggleFeaturedComments()">
+      <span>💬</span><span id="featuredCommentCount">0</span>
+    </button>
+    <button class="share-btn" onclick="openFeaturedShare()">
+      <span>✦</span>
+    </button>
+  </div>
+</section>
+
+<div class="featured-comment-section" id="featuredCommentSection">
+  <div class="featured-comment-inner">
+    <div class="featured-comment-list" id="featuredCommentList"></div>
+    <div class="featured-comment-form">
+      <input type="text" id="featuredCommentAuthor" placeholder="你的名字（可用暱稱）" maxlength="30">
+      <textarea id="featuredCommentText" rows="2" placeholder="留下你的感想..."></textarea>
+      <button class="featured-comment-submit" onclick="addFeaturedComment()">送出留言</button>
+    </div>
+  </div>
+</div>
+
+<div class="divider">最新投稿</div>
+<div class="latest-section">
+  <div class="latest-grid" id="latestGrid"></div>
+</div>
+
+<div class="divider">所有語錄</div>
+<div class="sort-bar">
+  <span class="sort-label">排序</span>
+  <button class="sort-btn active" onclick="setSort('popular', this)">人氣</button>
+  <button class="sort-btn" onclick="setSort('newest', this)">最新</button>
+  <button class="sort-btn" onclick="setSort('oldest', this)">最舊</button>
+</div>
+<div class="grid" id="grid"></div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到頂端">↑</button>
+
+<!-- Share overlay -->
+<div class="share-overlay" id="shareOverlay">
+  <button class="share-close" onclick="closeShare()">✕</button>
+  <canvas id="shareCanvas" style="display:none"></canvas>
+  <img class="share-preview" id="sharePreview" alt="限時動態預覽">
+  <div class="share-hint">
+    長按圖片儲存 → 打開 Instagram → 新增限時動態 → 從相簿選取
+  </div>
+  <div class="share-actions">
+    <button class="btn btn-primary" onclick="downloadStory()">⬇ 下載圖片</button>
+    <button class="btn" onclick="closeShare()">關閉</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Admin footer -->
+<div class="admin-footer">
+  <button class="admin-link" onclick="toggleAdmin()">管理員入口</button>
+</div>
+
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-inner">
+    <div class="admin-title">管理員審核區</div>
+    <div class="admin-sub">僅限授權管理員存取</div>
+    <div id="adminLogin" class="admin-login">
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.8">請用管理員的 Google 帳號登入</p>
+      <div class="admin-login-actions">
+        <button class="btn btn-primary" onclick="adminGoogleLogin()">G&nbsp; Google 登入</button>
+      </div>
+    </div>
+    <div id="adminContent" style="display:none">
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1.5rem">已登入：<span id="adminUserInfo"></span></div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;letter-spacing:0.04em;margin-bottom:0.8rem;">待審稿件</div>
+      <div class="pending-list" id="pendingList"></div>
+
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;letter-spacing:0.04em;margin:2.5rem 0 0.8rem;">已發布金句</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;letter-spacing:0.04em">共 <span id="publishedCount">0</span> 筆</div>
+      <div class="pending-list" id="publishedList"></div>
+
+      <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;letter-spacing:0.04em;margin:2.5rem 0 0.8rem;">會員收藏紀錄</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:1rem;letter-spacing:0.04em">共 <span id="memberCount">0</span> 位會員</div>
+      <div id="memberList"></div>
+
+      <div class="admin-logout">
+        <button class="btn" onclick="adminLogout()">登出</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, doc, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot, increment, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBSb4YVHJzdEc0WtPq7MyXNyyBw3atjnDs",
+  authDomain: "mastertien-d0fc1.firebaseapp.com",
+  projectId: "mastertien-d0fc1",
+  storageBucket: "mastertien-d0fc1.firebasestorage.app",
+  messagingSenderId: "931379586776",
+  appId: "1:931379586776:web:8f1846716c991e756fd9ad"
+};
+const ADMIN_EMAIL = 'jtty1234@gmail.com';
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+const quotesCol  = collection(db, 'quotes');
+const pendingCol = collection(db, 'pending');
+
+// ── State ──
+let quotes      = [];
+let currentSort = 'popular';
+let featuredId  = null;
+
+// ── Daily like limit (localStorage) ──
+const LS_LIKED = 'ty_liked_v3';
+function getLiked()       { try { return JSON.parse(localStorage.getItem(LS_LIKED)) || {}; } catch { return {}; } }
+function hasLiked(id)     { return !!getLiked()[id]; }
+function markLiked(id)    { const d = getLiked(); d[id] = true;  localStorage.setItem(LS_LIKED, JSON.stringify(d)); }
+function unmarkLiked(id)  { const d = getLiked(); delete d[id];  localStorage.setItem(LS_LIKED, JSON.stringify(d)); }
+
+// ── Helpers ──
+function pad(n) { return String(n).padStart(2, '0'); }
+function nowString() {
+  const d = new Date();
+  return d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate());
+}
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function unescHtml(s) {
+  return s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── Load published quotes (realtime) ──
+function listenQuotes() {
+  onSnapshot(quotesCol, snap => {
+    quotes = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+    renderGrid();
+    renderLatest();
+    renderPublished();
+    if (!featuredId) showRandom();
+  });
+}
+
+// ── Featured ──
+function showRandom() {
+  if (!quotes.length) return;
+  const q = quotes[Math.floor(Math.random() * quotes.length)];
+  featuredId = q.docId;
+  document.getElementById('featuredText').textContent = q.text;
+  document.getElementById('featuredMeta').textContent = '— 由 ' + q.submitter + ' 投稿・' + q.date;
+  document.getElementById('featuredLikeCount').textContent = q.likes || 0;
+  document.getElementById('featuredLike').classList.toggle('liked', hasLiked(q.docId));
+  document.getElementById('featuredCommentCount').textContent = q.commentCount || 0;
+  document.getElementById('featuredCommentSection').classList.remove('open');
+  document.getElementById('featuredCommentBtn').classList.remove('open');
+  const a = document.getElementById('featuredCommentAuthor');
+  const t = document.getElementById('featuredCommentText');
+  if (a) a.value = ''; if (t) t.value = '';
+}
+window.showRandom = showRandom;
+
+// ── Like ──
+async function doLike(docId, btnEl, countEl) {
+  if (hasLiked(docId)) {
+    // 取消讚
+    unmarkLiked(docId);
+    btnEl.classList.remove('liked');
+    countEl.textContent = Math.max(0, (parseInt(countEl.textContent) || 0) - 1);
+    await updateDoc(doc(db, 'quotes', docId), { likes: increment(-1) });
+  } else {
+    // 按讚
+    markLiked(docId);
+    btnEl.classList.add('liked', 'pop');
+    btnEl.addEventListener('animationend', () => btnEl.classList.remove('pop'), { once: true });
+    countEl.textContent = (parseInt(countEl.textContent) || 0) + 1;
+    await updateDoc(doc(db, 'quotes', docId), { likes: increment(1) });
+  }
+}
+
+window.likeFeatured = async function() {
+  if (!featuredId) return;
+  await doLike(featuredId, document.getElementById('featuredLike'), document.getElementById('featuredLikeCount'));
+  const cardBtn = document.querySelector('.action-btn[data-id="' + featuredId + '"]');
+  if (cardBtn) {
+    cardBtn.querySelector('span:last-child').textContent = document.getElementById('featuredLikeCount').textContent;
+    cardBtn.classList.toggle('liked', hasLiked(featuredId));
+  }
+};
+
+window.likeCard = async function(docId, btnEl) {
+  await doLike(docId, btnEl, btnEl.querySelector('span:last-child'));
+  if (featuredId === docId) {
+    document.getElementById('featuredLikeCount').textContent = btnEl.querySelector('span:last-child').textContent;
+    document.getElementById('featuredLike').classList.toggle('liked', hasLiked(docId));
+  }
+};
+
+// ── Comments ──
+window.toggleComments = function(docId, btnEl) {
+  const sec = document.getElementById('cs-' + docId);
+  const isOpen = sec.classList.toggle('open');
+  btnEl.classList.toggle('open', isOpen);
+  if (isOpen) loadComments(docId);
+};
+
+async function loadComments(docId) {
+  const listEl = document.getElementById('cl-' + docId);
+  if (!listEl) return;
+  const snap = await getDocs(query(collection(db, 'quotes', docId, 'comments'), orderBy('createdAt')));
+  renderCommentList(listEl, snap.docs.map(d => d.data()));
+}
+
+function renderCommentList(listEl, comments) {
+  listEl.innerHTML = comments.length
+    ? comments.map(c => '<div class="comment-item"><div class="comment-author">' + escHtml(c.author) + '</div><div>' + escHtml(c.text) + '</div></div>').join('')
+    : '<div class="comment-empty">還沒有留言，來說點什麼吧</div>';
+}
+
+window.addComment = async function(docId) {
+  const authorEl = document.getElementById('ca-' + docId);
+  const textEl   = document.getElementById('ct-' + docId);
+  const author = authorEl.value.trim(), text = textEl.value.trim();
+  if (!author) { showToast('請填寫名字'); return; }
+  if (!text)   { showToast('請填寫留言內容'); return; }
+  authorEl.value = ''; textEl.value = '';
+  await addDoc(collection(db, 'quotes', docId, 'comments'), { author, text, createdAt: serverTimestamp() });
+  await updateDoc(doc(db, 'quotes', docId), { commentCount: increment(1) });
+  showToast('留言成功！✓');
+  loadComments(docId);
+  const btn = document.querySelector('.comment-btn[data-id="' + docId + '"]');
+  const sec = document.getElementById('cs-' + docId);
+  if (sec) { sec.classList.add('open'); if (btn) btn.classList.add('open'); sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+};
+
+window.toggleFeaturedComments = function() {
+  const sec = document.getElementById('featuredCommentSection');
+  const btn = document.getElementById('featuredCommentBtn');
+  const isOpen = sec.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  if (isOpen && featuredId) loadFeaturedComments();
+};
+
+async function loadFeaturedComments() {
+  if (!featuredId) return;
+  const snap = await getDocs(query(collection(db, 'quotes', featuredId, 'comments'), orderBy('createdAt')));
+  renderCommentList(document.getElementById('featuredCommentList'), snap.docs.map(d => d.data()));
+}
+
+window.addFeaturedComment = async function() {
+  if (!featuredId) return;
+  const author = document.getElementById('featuredCommentAuthor').value.trim();
+  const text   = document.getElementById('featuredCommentText').value.trim();
+  if (!author) { showToast('請填寫名字'); return; }
+  if (!text)   { showToast('請填寫留言內容'); return; }
+  document.getElementById('featuredCommentAuthor').value = '';
+  document.getElementById('featuredCommentText').value = '';
+  await addDoc(collection(db, 'quotes', featuredId, 'comments'), { author, text, createdAt: serverTimestamp() });
+  await updateDoc(doc(db, 'quotes', featuredId), { commentCount: increment(1) });
+  loadFeaturedComments();
+  showToast('留言成功！✓');
+};
+
+// ── Grid ──
+function score(q) { return (q.likes || 0) + (q.commentCount || 0); }
+
+window.setSort = function(mode, btnEl) {
+  currentSort = mode;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  btnEl.classList.add('active');
+  renderGrid();
+};
+
+function sortedQuotes() {
+  const arr = [...quotes];
+  if (currentSort === 'popular') return arr.sort((a,b) => score(b) - score(a));
+  if (currentSort === 'newest')  return arr.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+  if (currentSort === 'oldest')  return arr.sort((a,b) => (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
+  return arr;
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  sortedQuotes().forEach(q => {
+    const liked  = hasLiked(q.docId);
+    const faved  = _userFavs.has(q.docId);
+    const lcount = q.likes || 0;
+    const ccount = q.commentCount || 0;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-body">
+        <div class="card-quote">${escHtml(q.text)}</div>
+        <div class="card-footer">
+          <div class="card-meta">
+            <div class="card-submitter">由 ${escHtml(q.submitter)} 投稿</div>
+            <div class="card-date">${q.date}</div>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn${liked ? ' liked' : ''}" data-id="${q.docId}" onclick="likeCard('${q.docId}', this)">
+              <span class="icon">❤️</span><span>${lcount}</span>
+            </button>
+            <button class="comment-btn" data-id="${q.docId}" onclick="toggleComments('${q.docId}', this)">
+              <span>💬</span><span class="ccount">${ccount}</span>
+            </button>
+            <button class="fav-btn${faved ? ' faved' : ''}" data-id="${q.docId}" onclick="toggleFav('${q.docId}', this)">${faved ? '★' : '☆'}</button>
+            <button class="share-btn" onclick="openShare('${q.docId}')">
+              <span>✦</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="related-section" id="rel-${q.docId}"></div>
+      <div class="comment-section" id="cs-${q.docId}">
+        <div class="comment-list" id="cl-${q.docId}"><div class="comment-empty">還沒有留言，來說點什麼吧</div></div>
+        <div class="comment-form">
+          <input type="text" id="ca-${q.docId}" placeholder="你的名字（可用暱稱）" maxlength="30">
+          <textarea id="ct-${q.docId}" rows="2" placeholder="留下你的感想..."></textarea>
+          <button class="comment-submit" onclick="addComment('${q.docId}')">送出留言</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── Latest 3 ──
+function renderLatest() {
+  const grid = document.getElementById('latestGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const latest = [...quotes].sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0)).slice(0,3);
+  if (!latest.length) { grid.innerHTML = '<div class="pending-empty">尚無金句</div>'; return; }
+  latest.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'latest-card';
+    div.style.animationDelay = (i * 0.06) + 's';
+    div.innerHTML = `<div class="latest-badge">最新收錄</div><div class="card-quote">${escHtml(q.text)}</div><div class="card-footer"><div class="card-submitter" style="font-size:0.72rem;color:var(--muted);font-style:italic">由 ${escHtml(q.submitter)} 投稿</div><div class="card-date" style="font-size:0.68rem;color:#ccc">${q.date}</div></div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ── Submit ──
+window.submitQuote = async function() {
+  const submitter = document.getElementById('submitterInput').value.trim();
+  const text = document.getElementById('quoteInput').value.trim();
+  if (!submitter) { showToast('請填寫投稿人名字'); return; }
+  if (!text)      { showToast('請填寫田園說了什麼'); return; }
+  await addDoc(pendingCol, { text, submitter, date: nowString(), createdAt: serverTimestamp() });
+  closeSubmit();
+  showToast('投稿成功！等待管理員審核 ✓');
+};
+
+window.toggleSubmit = function() {
+  const panel = document.getElementById('submitPanel');
+  const btn   = document.getElementById('submitToggleBtn');
+  const isOpen = panel.classList.toggle('open');
+  btn.textContent = isOpen ? '收起' : '我要投稿';
+  if (isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+window.closeSubmit = function() {
+  document.getElementById('submitPanel').classList.remove('open');
+  document.getElementById('submitToggleBtn').textContent = '我要投稿';
+  document.getElementById('submitterInput').value = '';
+  document.getElementById('quoteInput').value = '';
+};
+
+// ── Admin ──
+window.toggleAdmin = function() { document.getElementById('adminPanel').classList.toggle('open'); };
+
+window.adminGoogleLogin = async function() {
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch(e) { showToast('登入失敗：' + e.message); }
+};
+window.adminLogout = async function() { await signOut(auth); };
+
+onAuthStateChanged(auth, user => {
+  if (user && user.email === ADMIN_EMAIL) {
+    document.getElementById('adminLogin').style.display = 'none';
+    document.getElementById('adminContent').style.display = 'block';
+    document.getElementById('adminUserInfo').textContent = user.email;
+    listenPending();
+    loadMemberList();
+  } else {
+    document.getElementById('adminLogin').style.display = 'block';
+    document.getElementById('adminContent').style.display = 'none';
+    // 一般使用者不踢出，只是不顯示管理員內容
+  }
+});
+
+let pendingUnsubscribe = null;
+function listenPending() {
+  if (pendingUnsubscribe) pendingUnsubscribe();
+  pendingUnsubscribe = onSnapshot(pendingCol, snap => {
+    const pending = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+    renderPending(pending);
+  });
+}
+
+function renderPending(pending) {
+  const list = document.getElementById('pendingList');
+  list.innerHTML = '';
+  if (!pending.length) { list.innerHTML = '<div class="pending-empty">目前沒有待審稿件 ✓</div>'; return; }
+  pending.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'pending-item';
+    item.innerHTML = `<div class="pending-content"><div class="pending-text">${escHtml(p.text)}</div><div class="pending-meta">由 ${escHtml(p.submitter)} 投稿・${p.date}</div></div><div class="pending-actions"><button class="edit-btn" onclick="openEdit('${p.docId}', 'pending')">✎ 編輯</button><button class="approve-btn" onclick="approveQuote('${p.docId}')">✓ 發布</button><button class="reject-btn" onclick="rejectQuote('${p.docId}')">✕ 刪除</button></div>`;
+    list.appendChild(item);
+  });
+}
+
+// Store pending data for approve (populated by listenPending after admin login)
+let _pendingCache = {};
+
+window.approveQuote = async function(docId) {
+  const p = _pendingCache[docId];
+  if (!p) { showToast('找不到資料'); return; }
+  await addDoc(quotesCol, { text: p.text, submitter: p.submitter, date: p.date, likes: 0, commentCount: 0, createdAt: serverTimestamp() });
+  await deleteDoc(doc(db, 'pending', docId));
+  showToast('已發布！✓');
+};
+
+
+// ── User auth (public) ──
+let currentUserPublic = null;
+
+window.toggleUserMenu = function() {
+  document.getElementById('userMenu').classList.toggle('open');
+};
+
+// Close menu when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('#userWrap')) {
+    document.getElementById('userMenu').classList.remove('open');
+  }
+});
+
+window.userSignOut = async function() {
+  await signOut(auth);
+  document.getElementById('userMenu').classList.remove('open');
+};
+
+window.toggleFavPanel = function() {
+  document.getElementById('userMenu').classList.remove('open');
+  const panel = document.getElementById('favPanel');
+  const isOpen = panel.classList.toggle('open');
+  if (isOpen) renderFavPanel();
+  if (isOpen) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+// Track public user state separately from admin
+onAuthStateChanged(auth, user => {
+  currentUserPublic = user;
+  const btn = document.getElementById('userBtn');
+  if (user) {
+    // 任何人登入後（管理員或一般使用者）
+    btn.textContent = user.displayName || user.email.split('@')[0];
+    btn.classList.add('logged-in');
+    loadUserFavs(user.uid);
+    renderGrid();
+  } else {
+    // 未登入
+    btn.textContent = '登入';
+    btn.classList.remove('logged-in');
+    _userFavs = new Set();
+    renderGrid();
+  }
+  updateUserMenuItems(user);
+});
+
+function updateUserMenuItems(user) {
+  const menu = document.getElementById('userMenu');
+  if (!user) {
+    menu.innerHTML = `<button class="user-menu-item" onclick="userGoogleLogin()">G&nbsp; Google 登入</button>`;
+  } else {
+    const adminBadge = user.email === ADMIN_EMAIL ? ' <span style="font-size:0.62rem;color:#8ab;letter-spacing:0.08em">管理員</span>' : '';
+    menu.innerHTML = `
+      <button class="user-menu-item" style="font-style:italic;color:var(--muted);cursor:default;pointer-events:none">${escHtml(user.email)}${adminBadge}</button>
+      <button class="user-menu-item" onclick="toggleFavPanel()">★ 我的收藏</button>
+      <button class="user-menu-item danger" onclick="userSignOut()">登出</button>`;
+  }
+}
+
+window.userGoogleLogin = async function() {
+  try {
+    await signInWithPopup(auth, new GoogleAuthProvider());
+    document.getElementById('userMenu').classList.remove('open');
+  } catch(e) { showToast('登入失敗'); }
+};
+
+// ── Favorites ──
+let _userFavs = new Set(); // set of docIds
+
+async function loadUserFavs(uid) {
+  const snap = await getDocs(collection(db, 'users', uid, 'favorites'));
+  _userFavs = new Set(snap.docs.map(d => d.id));
+  renderFavButtons();
+}
+
+function renderFavButtons() {
+  document.querySelectorAll('.fav-btn').forEach(btn => {
+    const id = btn.dataset.id;
+    btn.classList.toggle('faved', _userFavs.has(id));
+    btn.textContent = _userFavs.has(id) ? '★' : '☆';
+  });
+}
+
+window.toggleFav = async function(docId, btnEl) {
+  if (!currentUserPublic) {
+    openLoginPrompt(docId);
+    return;
+  }
+  const uid = currentUserPublic.uid;
+  const favRef = doc(db, 'users', uid, 'favorites', docId);
+  if (_userFavs.has(docId)) {
+    // Remove
+    _userFavs.delete(docId);
+    btnEl.classList.remove('faved');
+    btnEl.textContent = '☆';
+    await deleteDoc(favRef);
+    showToast('已取消收藏');
+  } else {
+    // Add
+    _userFavs.add(docId);
+    btnEl.classList.add('faved');
+    btnEl.textContent = '★';
+    const q = quotes.find(x => x.docId === docId);
+    const { setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    await setDoc(favRef, {
+      text: q?.text || '',
+      submitter: q?.submitter || '',
+      date: q?.date || '',
+      savedAt: serverTimestamp(),
+      userEmail: currentUserPublic.email,
+      userName: currentUserPublic.displayName || ''
+    });
+    showToast('已加入收藏 ★');
+  }
+  renderFavPanel();
+};
+
+function renderFavPanel() {
+  const grid = document.getElementById('favGrid');
+  const countEl = document.getElementById('favCount');
+  if (!currentUserPublic) {
+    grid.innerHTML = '<div class="fav-login-prompt">請先登入 Google 帳號<br>才能使用收藏功能</div>';
+    return;
+  }
+  const favIds = [..._userFavs];
+  countEl.textContent = favIds.length;
+  if (!favIds.length) { grid.innerHTML = '<div class="fav-empty">還沒有收藏的金句</div>'; return; }
+  grid.innerHTML = '';
+  favIds.forEach((docId, i) => {
+    const q = quotes.find(x => x.docId === docId);
+    if (!q) return;
+    const card = document.createElement('div');
+    card.className = 'fav-card';
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.innerHTML = `
+      <div class="card-quote">${escHtml(q.text)}</div>
+      <div class="fav-card-footer">
+        <div style="font-size:0.7rem;color:var(--muted);font-style:italic">由 ${escHtml(q.submitter)} 投稿・${q.date}</div>
+        <button class="fav-remove-btn" onclick="toggleFav('${docId}', this)">取消收藏</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ── Admin: member list ──
+async function loadMemberList() {
+  const usersSnap = await getDocs(collection(db, 'users'));
+  const memberListEl = document.getElementById('memberList');
+  const memberCountEl = document.getElementById('memberCount');
+  if (!memberListEl) return;
+
+  const members = [];
+  for (const userDoc of usersSnap.docs) {
+    const favsSnap = await getDocs(collection(db, 'users', userDoc.id, 'favorites'));
+    const favs = favsSnap.docs.map(d => d.data());
+    if (favs.length > 0) {
+      members.push({ uid: userDoc.id, favs });
+    }
+  }
+
+  memberCountEl.textContent = members.length;
+  if (!members.length) {
+    memberListEl.innerHTML = '<div class="pending-empty">尚無收藏紀錄</div>';
+    return;
+  }
+
+  let tableHTML = '<table class="member-table"><thead><tr><th>使用者</th><th>收藏數</th><th>收藏金句</th></tr></thead><tbody>';
+  members.forEach(m => {
+    const email = m.favs[0]?.userEmail || m.uid;
+    const name  = m.favs[0]?.userName || '—';
+    const favTexts = m.favs.map(f => `<div>・${escHtml(f.text)}</div>`).join('');
+    tableHTML += `<tr>
+      <td>${escHtml(name)}<br><span style="font-size:0.68rem;color:var(--muted)">${escHtml(email)}</span></td>
+      <td style="text-align:center">${m.favs.length}</td>
+      <td><div class="member-fav-list">${favTexts}</div></td>
+    </tr>`;
+  });
+  tableHTML += '</tbody></table>';
+  memberListEl.innerHTML = tableHTML;
+}
+
+
+
+
+
+
+
+// ── Related cards ──
+function renderRelated(docId) {
+  const relEl = document.getElementById('rel-' + docId);
+  if (!relEl) return;
+  const current = quotes.find(q => q.docId === docId);
+  if (!current) return;
+
+  // Find related: same submitter or same year, exclude self
+  const year = current.date ? current.date.slice(0, 4) : '';
+  const related = quotes.filter(q => {
+    if (q.docId === docId) return false;
+    return q.submitter === current.submitter || (year && q.date && q.date.startsWith(year));
+  });
+
+  if (!related.length) { relEl.innerHTML = ''; return; }
+
+  // Pick 3 random
+  const shuffled = related.sort(() => Math.random() - 0.5).slice(0, 3);
+
+  relEl.innerHTML = '<div class="related-label">相關金句</div><div class="related-grid">' +
+    shuffled.map(q => `<div class="related-item" onclick="scrollToCard('${q.docId}')">${escHtml(q.text)}<span style="font-size:0.65rem;color:#bbb;font-style:normal;margin-left:0.5em">${q.submitter}</span></div>`).join('') +
+    '</div>';
+}
+
+window.scrollToCard = function(docId) {
+  // close any open related panel first, then scroll
+  const card = document.querySelector('.card[data-id="' + docId + '"] .card-body');
+  if (card) card.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
+
+// Show related when comment section opens
+const _origToggleComments = window.toggleComments;
+window.toggleComments = function(docId, btnEl) {
+  _origToggleComments(docId, btnEl);
+  renderRelated(docId);
+};
+
+
+
+
+// ── Dark mode ──
+(function() {
+  if (localStorage.getItem('ty_dark') === '1') {
+    document.body.classList.add('dark');
+  }
+})();
+
+window.toggleDark = function() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('ty_dark', isDark ? '1' : '0');
+  document.getElementById('darkToggle').textContent = isDark ? '☀' : '☽';
+};
+
+// Set correct icon on load
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.body.classList.contains('dark')) {
+    document.getElementById('darkToggle').textContent = '☀';
+  }
+});
+
+// ── Login prompt modal ──
+let _pendingFavDocId = null;
+
+function openLoginPrompt(docId) {
+  _pendingFavDocId = docId || null;
+  document.getElementById('loginOverlay').classList.add('open');
+}
+function closeLoginPrompt() {
+  document.getElementById('loginOverlay').classList.remove('open');
+  _pendingFavDocId = null;
+}
+window.openLoginPrompt  = openLoginPrompt;
+
+window.closeLoginPrompt = closeLoginPrompt;
+
+window.loginAndFav = async function() {
+  try {
+    await signInWithPopup(auth, new GoogleAuthProvider());
+    closeLoginPrompt();
+    // After login, auto-fav the card that triggered the prompt
+    if (_pendingFavDocId) {
+      const btn = document.querySelector(`.fav-btn[data-id="${_pendingFavDocId}"]`);
+      await toggleFav(_pendingFavDocId, btn || document.createElement('button'));
+      _pendingFavDocId = null;
+    }
+  } catch(e) { showToast('登入失敗'); }
+};
+
+// ── Edit modal ──
+function openEdit(docId, colName) {
+  const data = colName === 'pending'
+    ? _pendingCache[docId]
+    : quotes.find(q => q.docId === docId);
+  if (!data) { showToast('找不到資料'); return; }
+  document.getElementById('editDocId').value = docId;
+  document.getElementById('editCollection').value = colName;
+  document.getElementById('editText').value = data.text;
+  document.getElementById('editSubmitter').value = data.submitter;
+  document.getElementById('editDate').value = data.date;
+  document.getElementById('editModalSub').textContent = colName === 'pending' ? '待審投稿' : '已發布金句';
+  document.getElementById('editOverlay').classList.add('open');
+}
+
+function closeEdit() {
+  document.getElementById('editOverlay').classList.remove('open');
+}
+
+window.openEdit  = openEdit;
+window.closeEdit = closeEdit;
+
+window.saveEdit = async function() {
+  const docId  = document.getElementById('editDocId').value;
+  const colName = document.getElementById('editCollection').value;
+  const text      = document.getElementById('editText').value.trim();
+  const submitter = document.getElementById('editSubmitter').value.trim();
+  const date      = document.getElementById('editDate').value.trim();
+  if (!text || !submitter || !date) { showToast('請填寫所有欄位'); return; }
+  await updateDoc(doc(db, colName, docId), { text, submitter, date });
+  closeEdit();
+  showToast('儲存成功！✓');
+};
+
+// ── Published list in admin ──
+function renderPublished() {
+  const list = document.getElementById('publishedList');
+  if (!list) return;
+  const sorted = [...quotes].sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+  document.getElementById('publishedCount').textContent = sorted.length;
+  list.innerHTML = '';
+  sorted.forEach(q => {
+    const item = document.createElement('div');
+    item.className = 'pending-item';
+    item.innerHTML = `
+      <div class="pending-content">
+        <div class="pending-text">${escHtml(q.text)}</div>
+        <div class="pending-meta">由 ${escHtml(q.submitter)} 投稿・${q.date}</div>
+      </div>
+      <div class="pending-actions">
+        <button class="edit-btn" onclick="openEdit('${q.docId}', 'quotes')">✎ 編輯</button>
+      </div>`;
+    list.appendChild(item);
+  });
+}
+
+window.rejectQuote = async function(docId) {
+  await deleteDoc(doc(db, 'pending', docId));
+  showToast('已刪除');
+};
+
+// ── Share ──
+let _shareDataUrl = null;
+window.openFeaturedShare = function() {
+  if (!featuredId) return;
+  const q = quotes.find(x => x.docId === featuredId);
+  if (!q) return;
+  generateStory(q.text, q.date);
+  document.getElementById('shareOverlay').classList.add('open');
+};
+
+window.openShare = function(docId) {
+  const q = quotes.find(x => x.docId === docId);
+  if (!q) return;
+  generateStory(q.text, q.date);
+  document.getElementById('shareOverlay').classList.add('open');
+};
+window.closeShare = function() { document.getElementById('shareOverlay').classList.remove('open'); _shareDataUrl = null; };
+
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const chars = text.split(''); let line = ''; const lines = [];
+  for (let i = 0; i < chars.length; i++) {
+    const testLine = line + chars[i];
+    if (ctx.measureText(testLine).width > maxWidth && line.length > 0) { lines.push(line); line = chars[i]; }
+    else { line = testLine; }
+  }
+  if (line) lines.push(line);
+  const totalH = lines.length * lineHeight;
+  let startY = y - totalH / 2;
+  lines.forEach((l, i) => { ctx.fillText(l, x, startY + i * lineHeight); });
+}
+
+function generateStory(text, date) {
+  const W = 1080, H = 1920;
+  const canvas = document.getElementById('shareCanvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#faf9f7'; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = '#e8e4df'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(80, 120); ctx.lineTo(W-80, 120); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(80, H-120); ctx.lineTo(W-80, H-120); ctx.stroke();
+  ctx.fillStyle = '#888'; ctx.font = '36px serif'; ctx.letterSpacing = '12px';
+  ctx.textAlign = 'center'; ctx.fillText('田 園 語 錄', W/2, 88);
+  ctx.fillStyle = '#e8e4df'; ctx.font = 'italic 320px Georgia, serif';
+  ctx.textAlign = 'left'; ctx.fillText('\u201C', 60, 680);
+  ctx.fillStyle = '#1a1a1a'; ctx.font = 'italic 72px Georgia, "Noto Serif TC", serif';
+  ctx.textAlign = 'center'; ctx.letterSpacing = '2px';
+  wrapText(ctx, text, W/2, H/2, W-200, 108);
+  ctx.fillStyle = '#aaa'; ctx.font = '32px serif'; ctx.letterSpacing = '4px';
+  ctx.textAlign = 'center'; ctx.fillText(date, W/2, H/2+320);
+  ctx.fillStyle = '#ccc'; ctx.font = '28px serif'; ctx.letterSpacing = '6px';
+  ctx.fillText('田 園 金 句 典 藏 計 劃', W/2, H-72);
+  _shareDataUrl = canvas.toDataURL('image/png');
+  document.getElementById('sharePreview').src = _shareDataUrl;
+}
+window.downloadStory = function() {
+  if (!_shareDataUrl) return;
+  const a = document.createElement('a'); a.href = _shareDataUrl; a.download = '田園語錄_限時動態.png'; a.click();
+};
+
+// ── Back to top ──
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backTop');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// ── Init ──
+listenQuotes();
+</script>
+<!-- Edit modal -->
+<div class="edit-overlay" id="editOverlay">
+  <div class="edit-modal">
+    <button class="edit-close" onclick="closeEdit()">✕</button>
+    <div class="edit-modal-title">編輯金句</div>
+    <div class="edit-modal-sub" id="editModalSub">已發布</div>
+    <input type="hidden" id="editDocId">
+    <input type="hidden" id="editCollection">
+    <div class="bfield">
+      <label>金句內容</label>
+      <textarea id="editText" rows="3" style="width:100%;padding:0.5rem 0;font-family:'Noto Serif TC',serif;font-size:0.9rem;font-weight:300;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);outline:none;resize:none;" onfocus="this.style.borderBottomColor='var(--text)'" onblur="this.style.borderBottomColor='var(--border)'"></textarea>
+    </div>
+    <div class="bfield">
+      <label>投稿人</label>
+      <input type="text" id="editSubmitter" style="width:100%;padding:0.5rem 0;font-family:'Noto Serif TC',serif;font-size:0.9rem;font-weight:300;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);outline:none;" onfocus="this.style.borderBottomColor='var(--text)'" onblur="this.style.borderBottomColor='var(--border)'">
+    </div>
+    <div class="bfield">
+      <label>日期</label>
+      <input type="text" id="editDate" placeholder="YYYY.MM.DD" style="width:100%;padding:0.5rem 0;font-family:'Noto Serif TC',serif;font-size:0.9rem;font-weight:300;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);outline:none;" onfocus="this.style.borderBottomColor='var(--text)'" onblur="this.style.borderBottomColor='var(--border)'">
+    </div>
+    <div class="edit-modal-actions">
+      <button class="btn" onclick="closeEdit()">取消</button>
+      <button class="btn btn-primary" onclick="saveEdit()">儲存</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Login prompt modal -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-modal">
+    <button class="login-modal-close" onclick="closeLoginPrompt()">✕</button>
+    <div class="login-modal-icon">★</div>
+    <div class="login-modal-title">收藏這句金句</div>
+    <div class="login-modal-sub">登入 Google 帳號<br>即可收藏你喜歡的田園金句</div>
+    <button class="google-login-btn" onclick="loginAndFav()">
+      <div class="g-icon"></div>
+      用 Google 帳號登入
+    </button>
+  </div>
+</div>
+
+
+
+
+</body>
+</html>
