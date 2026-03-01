@@ -2388,6 +2388,8 @@ function listenPending() {
   if (pendingUnsubscribe) pendingUnsubscribe();
   pendingUnsubscribe = onSnapshot(pendingCol, snap => {
     const pending = snap.docs.map(d => ({ docId: d.id, ...d.data() }));
+    _pendingCache = {};
+    pending.forEach(p => { _pendingCache[p.docId] = p; });
     renderPending(pending);
   });
 }
