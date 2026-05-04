@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkedIn Outreach Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0f0f0e;--ink2:#444441;--ink3:#888780;--ink4:#b4b2a9;
+  --paper:#faf9f7;--paper2:#f1efe8;--white:#ffffff;
+  --accent:#185FA5;--accent-l:#E6F1FB;--accent-m:#85B7EB;
+  --green:#0F6E56;--green-l:#E1F5EE;--green-m:#5DCAA5;
+  --amber:#854F0B;--amber-l:#FAEEDA;
+  --red:#A32D2D;--red-l:#FCEBEB;
+  --purple:#534AB7;--purple-l:#EEEDFE;--purple-m:#AFA9EC;
+  --border:rgba(15,15,14,0.10);--border2:rgba(15,15,14,0.18);
+  --r:10px;--r-lg:14px;
+  --font-display:'DM Serif Display',serif;
+  --font-body:'Instrument Sans',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --shadow:0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+html,body{height:100%;background:var(--paper);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.6}
+
+/* ── Auth Screen ── */
+#auth-screen{
+  position:fixed;inset:0;background:var(--paper);z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+}
+.auth-card{
+  width:360px;padding:2.5rem 2rem;
+  background:var(--white);border:0.5px solid var(--border2);
+  border-radius:var(--r-lg);box-shadow:var(--shadow);
+  text-align:center;
+}
+.auth-logo{font-family:var(--font-display);font-size:28px;margin-bottom:4px;letter-spacing:-0.02em}
+.auth-sub{font-size:12px;color:var(--ink3);font-family:var(--font-mono);margin-bottom:2rem;letter-spacing:0.04em}
+.auth-card label{display:block;font-size:11px;font-family:var(--font-mono);color:var(--ink3);text-align:left;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.06em}
+.auth-card input{
+  width:100%;padding:10px 12px;border:0.5px solid var(--border2);
+  border-radius:var(--r);font-family:var(--font-body);font-size:13px;
+  color:var(--ink);background:var(--paper2);outline:none;
+  transition:border 0.15s;margin-bottom:14px;
+}
+.auth-card input:focus{border-color:var(--accent);background:white}
+.auth-btn{
+  width:100%;padding:11px;background:var(--ink);color:var(--paper);
+  border:none;border-radius:var(--r);font-family:var(--font-body);
+  font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.15s;
+}
+.auth-btn:hover{opacity:0.82}
+.auth-err{font-size:12px;color:var(--red);margin-top:10px;min-height:18px;font-family:var(--font-mono)}
+
+/* ── App Layout ── */
+#app{display:none;min-height:100vh;flex-direction:column}
+#app.visible{display:flex}
+
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;height:54px;background:var(--white);
+  border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:100;
+}
+.topbar-brand{display:flex;align-items:baseline;gap:10px}
+.topbar-brand h1{font-family:var(--font-display);font-size:20px;font-weight:400;letter-spacing:-0.02em}
+.topbar-brand .tag{font-size:10px;font-family:var(--font-mono);background:var(--accent-l);color:var(--accent);padding:2px 7px;border-radius:4px;letter-spacing:0.05em}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-nav{display:flex;gap:2px}
+.tn-btn{
+  font-family:var(--font-body);font-size:13px;padding:6px 14px;
+  border:none;background:transparent;color:var(--ink3);cursor:pointer;
+  border-radius:7px;transition:all 0.15s;
+}
+.tn-btn.on{background:var(--paper2);color:var(--ink);font-weight:500}
+.logout-btn{
+  font-size:11px;font-family:var(--font-mono);color:var(--ink4);
+  background:transparent;border:0.5px solid var(--border);
+  padding:4px 10px;border-radius:5px;cursor:pointer;transition:all 0.15s;letter-spacing:0.04em
+}
+.logout-btn:hover{color:var(--ink2);border-color:var(--border2)}
+
+.main{flex:1;padding:2rem;max-width:740px;margin:0 auto;width:100%}
+
+/* ── Panels ── */
+.panel{display:none}.panel.on{display:block}
+
+/* ── Setup panel ── */
+.setup-section{margin-bottom:1.75rem}
+.section-title{
+  font-size:11px;font-family:var(--font-mono);color:var(--ink3);
+  text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px
+}
+.section-title::after{content:'';flex:1;height:0.5px;background:var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field-wrap{display:flex;flex-direction:column;gap:5px}
+.field-wrap.full{grid-column:1/-1}
+label{font-size:11px;font-family:var(--font-mono);color:var(--ink3);letter-spacing:0.05em;text-transform:uppercase}
+input[type=text],input[type=password],textarea,select{
+  font-family:var(--font-body);font-size:13px;color:var(--ink);
+  background:var(--white);border:0.5px solid var(--border2);border-radius:var(--r);
+  padding:9px 12px;outline:none;transition:border 0.15s;width:100%
+}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);background:white}
+textarea{resize:vertical;min-height:72px;line-height:1.6}
+.api-note{font-size:11px;color:var(--ink3);margin-top:5px;font-family:var(--font-mono);line-height:1.5}
+.save-btn{
+  padding:9px 22px;background:var(--ink);color:var(--paper);
+  border:none;border-radius:var(--r);font-family:var(--font-body);
+  font-size:13px;font-weight:500;cursor:pointer;transition:opacity 0.15s;
+}
+.save-btn:hover{opacity:0.82}
+.saved-msg{font-size:12px;color:var(--green);margin-left:10px;display:none;font-family:var(--font-mono)}
+
+/* ── Compose panel ── */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  font-size:12px;font-family:var(--font-body);padding:5px 12px;
+  border:0.5px solid var(--border2);border-radius:20px;cursor:pointer;
+  color:var(--ink3);background:transparent;transition:all 0.15s;
+}
+.chip.on{background:var(--accent-l);border-color:var(--accent-m);color:var(--accent)}
+.tone-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+.tone-card{
+  border:0.5px solid var(--border);border-radius:9px;padding:9px 10px;
+  cursor:pointer;transition:all 0.15s;text-align:center;background:var(--white);
+}
+.tone-card.on{border:1.5px solid var(--accent);background:var(--accent-l)}
+.tone-card .t-name{font-size:12px;font-weight:500;color:var(--ink)}
+.tone-card .t-sub{font-size:10px;color:var(--ink3);margin-top:2px}
+.generate-btn{
+  width:100%;padding:13px;background:var(--ink);color:var(--paper);
+  border:none;border-radius:var(--r);font-family:var(--font-body);
+  font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.15s;
+  margin-top:1.25rem;letter-spacing:0.01em;
+}
+.generate-btn:hover:not(:disabled){opacity:0.82}
+.generate-btn:disabled{opacity:0.38;cursor:not-allowed}
+
+.output-area{margin-top:1.5rem}
+.out-block{
+  background:var(--white);border:0.5px solid var(--border);
+  border-radius:var(--r-lg);padding:1.15rem 1.25rem;margin-bottom:12px;
+}
+.out-header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.out-badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:11px;
+  font-family:var(--font-mono);padding:3px 9px;border-radius:4px;
+  letter-spacing:0.04em;font-weight:500;
+}
+.out-badge.connect{background:var(--green-l);color:var(--green)}
+.out-badge.coffee{background:var(--amber-l);color:var(--amber)}
+.char-info{font-size:11px;font-family:var(--font-mono);color:var(--ink4);margin-left:auto}
+.char-info.warn{color:var(--red)}
+.out-text{
+  font-size:13px;line-height:1.8;color:var(--ink);
+  white-space:pre-wrap;min-height:44px;
+}
+.spinner-inline{
+  display:inline-block;width:13px;height:13px;
+  border:2px solid var(--border2);border-top-color:var(--ink3);
+  border-radius:50%;animation:spin 0.65s linear infinite;vertical-align:middle;margin-right:6px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.out-actions{
+  display:flex;gap:8px;margin-top:12px;
+  border-top:0.5px solid var(--border);padding-top:10px;flex-wrap:wrap;
+}
+.act-btn{
+  font-size:12px;font-family:var(--font-body);padding:5px 13px;
+  border:0.5px solid var(--border2);background:transparent;
+  color:var(--ink2);cursor:pointer;border-radius:6px;transition:all 0.15s;
+}
+.act-btn:hover{background:var(--accent-l);color:var(--accent);border-color:var(--accent-m)}
+.act-btn.done{background:var(--green-l);color:var(--green);border-color:transparent}
+
+/* ── Log panel ── */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
+.stat-card{
+  background:var(--white);border:0.5px solid var(--border);
+  border-radius:var(--r);padding:12px 16px;
+}
+.stat-n{font-size:28px;font-weight:400;color:var(--ink);font-family:var(--font-display)}
+.stat-l{font-size:10px;font-family:var(--font-mono);color:var(--ink3);margin-top:2px;letter-spacing:0.05em;text-transform:uppercase}
+.log-empty{text-align:center;padding:4rem 1rem;color:var(--ink4)}
+.log-empty .big{font-family:var(--font-display);font-size:48px;color:var(--border2);margin-bottom:10px}
+.log-empty p{font-size:13px;color:var(--ink3)}
+.log-table{width:100%;border-collapse:collapse}
+.log-table th{
+  font-size:10px;font-family:var(--font-mono);color:var(--ink3);
+  text-align:left;padding:7px 10px;border-bottom:0.5px solid var(--border2);
+  letter-spacing:0.06em;text-transform:uppercase;
+}
+.log-table td{font-size:13px;padding:11px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle}
+.log-table tr:last-child td{border-bottom:none}
+.log-name{font-weight:500}
+.log-role{font-size:11px;color:var(--ink3);margin-top:1px}
+.status-pill{
+  display:inline-block;font-size:10px;font-family:var(--font-mono);
+  padding:3px 8px;border-radius:4px;cursor:pointer;transition:all 0.15s;
+  letter-spacing:0.04em;font-weight:500;
+}
+.status-pill.sent{background:var(--accent-l);color:var(--accent)}
+.status-pill.replied{background:var(--green-l);color:var(--green)}
+.status-pill.pending{background:var(--amber-l);color:var(--amber)}
+.status-pill.no-reply{background:var(--red-l);color:var(--red)}
+.del-btn{
+  font-size:11px;padding:3px 8px;border:0.5px solid var(--border);
+  background:transparent;cursor:pointer;border-radius:4px;color:var(--ink4);
+  font-family:var(--font-mono);transition:all 0.15s;
+}
+.del-btn:hover{background:var(--red-l);color:var(--red);border-color:transparent}
+.expand-btn{
+  font-size:11px;padding:3px 8px;border:0.5px solid var(--border);
+  background:transparent;cursor:pointer;border-radius:4px;color:var(--ink3);
+  font-family:var(--font-mono);
+}
+.log-detail{
+  display:none;background:var(--paper2);border-top:0.5px solid var(--border);
+  padding:10px 12px;font-size:12px;line-height:1.7;color:var(--ink2);
+  white-space:pre-wrap;
+}
+
+/* ── Divider ── */
+hr.sep{border:none;border-top:0.5px solid var(--border);margin:1.5rem 0}
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">Outreach</div>
+    <div class="auth-sub">LINKEDIN AGENT · PRIVATE</div>
+    <label>Password</label>
+    <input type="password" id="auth-pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')login()">
+    <button class="auth-btn" onclick="login()">Enter →</button>
+    <div class="auth-err" id="auth-err"></div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <h1>Outreach</h1>
+      <span class="tag">LINKEDIN AGENT</span>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-nav">
+        <button class="tn-btn on" onclick="switchTab(0)">Compose</button>
+        <button class="tn-btn" onclick="switchTab(1)">Log</button>
+        <button class="tn-btn" onclick="switchTab(2)">Setup</button>
+      </div>
+      <button class="logout-btn" onclick="logout()">lock</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- COMPOSE -->
+    <div class="panel on" id="p0">
+      <div class="setup-section">
+        <div class="section-title">Target person</div>
+        <div class="form-grid">
+          <div class="field-wrap">
+            <label>Name</label>
+            <input type="text" id="f-name" placeholder="e.g. Alex Chen">
+          </div>
+          <div class="field-wrap">
+            <label>Current role</label>
+            <input type="text" id="f-role" placeholder="e.g. Associate, McKinsey">
+          </div>
+          <div class="field-wrap">
+            <label>Background</label>
+            <input type="text" id="f-bg" placeholder="e.g. ex-Warner Media, Wharton MBA">
+          </div>
+          <div class="field-wrap">
+            <label>Company / School</label>
+            <input type="text" id="f-org" placeholder="e.g. Bain, Kellogg">
+          </div>
+          <div class="field-wrap full">
+            <label>Hook / Common ground</label>
+            <input type="text" id="f-hook" placeholder="e.g. both from media industry, mutual connection Jane Wu, saw their post about...">
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <div class="section-title">Your goals</div>
+        <div class="chips" id="goal-chips">
+          <div class="chip on" data-val="career transition advice from media to consulting">Career transition</div>
+          <div class="chip on" data-val="MBA application strategy and school selection">MBA strategy</div>
+          <div class="chip on" data-val="breaking into management consulting">Consulting entry</div>
+          <div class="chip" data-val="media and entertainment industry insights">Media insights</div>
+          <div class="chip" data-val="understanding day-to-day consulting life">Consulting life</div>
+          <div class="chip" data-val="building a professional network in target industries">Network building</div>
+          <div class="chip" data-val="alumni connection and shared experiences">Alumni connect</div>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <div class="section-title">Tone</div>
+        <div class="tone-grid">
+          <div class="tone-card on" data-tone="warm and genuine">
+            <div class="t-name">Warm</div><div class="t-sub">genuine, personal</div>
+          </div>
+          <div class="tone-card" data-tone="concise and direct">
+            <div class="t-name">Direct</div><div class="t-sub">short, clear</div>
+          </div>
+          <div class="tone-card" data-tone="professional and polished">
+            <div class="t-name">Formal</div><div class="t-sub">executive style</div>
+          </div>
+          <div class="tone-card" data-tone="curious and conversational">
+            <div class="t-name">Casual</div><div class="t-sub">friendly chat</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="generate-btn" id="gen-btn" onclick="generate()">Generate Connect Request + Coffee Chat →</button>
+
+      <div class="output-area" id="output-area" style="display:none">
+        <div class="out-block">
+          <div class="out-header">
+            <div class="out-badge connect">● Connect Request</div>
+            <span class="char-info" id="cc-info">— chars</span>
+          </div>
+          <div class="out-text" id="out-connect"></div>
+          <div class="out-actions">
+            <button class="act-btn" onclick="regen('connect')">↺ Regenerate</button>
+            <button class="act-btn" id="copy-c" onclick="copyMsg('connect')">Copy</button>
+            <button class="act-btn" onclick="saveEntry('connect')">Save to log</button>
+          </div>
+        </div>
+        <div class="out-block">
+          <div class="out-header">
+            <div class="out-badge coffee">● Coffee Chat Message</div>
+            <span class="char-info" id="fc-info">— words</span>
+          </div>
+          <div class="out-text" id="out-coffee"></div>
+          <div class="out-actions">
+            <button class="act-btn" onclick="regen('coffee')">↺ Regenerate</button>
+            <button class="act-btn" id="copy-f" onclick="copyMsg('coffee')">Copy</button>
+            <button class="act-btn" onclick="saveEntry('coffee')">Save to log</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOG -->
+    <div class="panel" id="p1">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" id="s-total">0</div><div class="stat-l">Saved</div></div>
+        <div class="stat-card"><div class="stat-n" id="s-replied">0</div><div class="stat-l">Replied</div></div>
+        <div class="stat-card"><div class="stat-n" id="s-rate">—</div><div class="stat-l">Reply rate</div></div>
+      </div>
+      <div id="log-wrap"></div>
+    </div>
+
+    <!-- SETUP -->
+    <div class="panel" id="p2">
+
+      <div class="setup-section">
+        <div class="section-title">Your background</div>
+        <div class="form-grid">
+          <div class="field-wrap">
+            <label>Your name</label>
+            <input type="text" id="p-name" placeholder="e.g. Jamie">
+          </div>
+          <div class="field-wrap">
+            <label>Current role</label>
+            <input type="text" id="p-role" placeholder="e.g. Senior tech journalist, Taiwan">
+          </div>
+          <div class="field-wrap full">
+            <label>Career background</label>
+            <textarea id="p-bg" placeholder="e.g. 5+ years covering AI & cybersecurity in Taiwan media. Exploring MBA + consulting transition."></textarea>
+          </div>
+          <div class="field-wrap full">
+            <label>Target MBA programs (optional)</label>
+            <input type="text" id="p-mba" placeholder="e.g. Wharton, Kellogg, LBS — strategy/consulting track">
+          </div>
+          <div class="field-wrap full">
+            <label>What you offer in return</label>
+            <input type="text" id="p-offer" placeholder="e.g. Taiwan tech/media industry perspective, happy to share research or give feedback">
+          </div>
+        </div>
+        <br>
+        <button class="save-btn" onclick="saveProfile()">Save profile</button>
+        <span class="saved-msg" id="profile-saved">Saved ✓</span>
+      </div>
+
+      <hr class="sep">
+
+      <div class="setup-section">
+        <div class="section-title">Anthropic API key</div>
+        <div class="field-wrap">
+          <label>API Key</label>
+          <input type="password" id="p-apikey" placeholder="sk-ant-...">
+          <div class="api-note">Stored only in your browser's localStorage. Never sent anywhere except api.anthropic.com.</div>
+        </div>
+        <br>
+        <button class="save-btn" onclick="saveApiKey()">Save key</button>
+        <span class="saved-msg" id="key-saved">Saved ✓</span>
+      </div>
+
+      <hr class="sep">
+
+      <div class="setup-section">
+        <div class="section-title">Change password</div>
+        <div class="form-grid">
+          <div class="field-wrap">
+            <label>New password</label>
+            <input type="password" id="p-pw1" placeholder="New password">
+          </div>
+          <div class="field-wrap">
+            <label>Confirm</label>
+            <input type="password" id="p-pw2" placeholder="Confirm password">
+          </div>
+        </div>
+        <br>
+        <button class="save-btn" onclick="changePassword()">Update password</button>
+        <span class="saved-msg" id="pw-saved">Updated ✓</span>
+        <span class="saved-msg" id="pw-err" style="color:var(--red)">Passwords don't match</span>
+      </div>
+
+    </div>
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ── Auth ──
+// Default password: "outreach2024" — change in Setup after first login
+const DEFAULT_PW = 'outreach2024';
+
+function simpleHash(str){
+  let h = 5381;
+  for(let i = 0; i < str.length; i++) h = (Math.imul(33, h) ^ str.charCodeAt(i)) >>> 0;
+  return h.toString(16);
+}
+
+function login(){
+  const pw = document.getElementById('auth-pw').value;
+  if(!pw){ document.getElementById('auth-err').textContent = 'Enter a password.'; return; }
+  const hash = simpleHash(pw);
+  const stored = localStorage.getItem('li-pw-hash') || simpleHash(DEFAULT_PW);
+  if(hash === stored){
+    localStorage.setItem('li-session', Date.now());
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    loadProfile();
+  } else {
+    document.getElementById('auth-err').textContent = 'Incorrect password.';
+    document.getElementById('auth-pw').value = '';
+  }
+}
+
+function checkSession(){
+  const s = localStorage.getItem('li-session');
+  if(s && Date.now() - parseInt(s) < 8*60*60*1000){
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    loadProfile();
+  }
+}
+
+function logout(){
+  localStorage.removeItem('li-session');
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('auth-pw').value = '';
+  document.getElementById('auth-err').textContent = '';
+}
+
+function changePassword(){
+  const p1 = document.getElementById('p-pw1').value;
+  const p2 = document.getElementById('p-pw2').value;
+  const e = document.getElementById('pw-err');
+  const s = document.getElementById('pw-saved');
+  e.style.display = 'none'; s.style.display = 'none';
+  if(!p1 || p1 !== p2){ e.style.display = 'inline'; return; }
+  const hash = simpleHash(p1);
+  localStorage.setItem('li-pw-hash', hash);
+  s.style.display = 'inline';
+  document.getElementById('p-pw1').value = '';
+  document.getElementById('p-pw2').value = '';
+  setTimeout(()=>s.style.display='none', 2000);
+}
+
+// ── Nav ──
+function switchTab(i){
+  ['p0','p1','p2'].forEach((id,j)=>document.getElementById(id).classList.toggle('on',j===i));
+  document.querySelectorAll('.tn-btn').forEach((b,j)=>b.classList.toggle('on',j===i));
+  if(i===1) renderLog();
+}
+
+// ── Chips & Tone ──
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on')));
+document.querySelectorAll('.tone-card').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('.tone-card').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on');
+}));
+function getGoals(){
+  return [...document.querySelectorAll('#goal-chips .chip.on')].map(c=>c.dataset.val).join('; ');
+}
+function getTone(){
+  return document.querySelector('.tone-card.on')?.dataset.tone || 'warm and genuine';
+}
+
+// ── State ──
+let msgs = {connect:'', coffee:''};
+let lastCtx = {};
+let profile = {};
+let log = JSON.parse(localStorage.getItem('li-log')||'[]');
+
+function getApiKey(){ return localStorage.getItem('li-apikey')||''; }
+
+// ── Profile ──
+function loadProfile(){
+  profile = JSON.parse(localStorage.getItem('li-profile')||'{}');
+  document.getElementById('p-name').value = profile.name||'';
+  document.getElementById('p-role').value = profile.pRole||'';
+  document.getElementById('p-bg').value = profile.pBg||'';
+  document.getElementById('p-mba').value = profile.pMba||'';
+  document.getElementById('p-offer').value = profile.pOffer||'';
+  const k = getApiKey();
+  if(k) document.getElementById('p-apikey').value = k;
+}
+function saveProfile(){
+  profile = {
+    name: document.getElementById('p-name').value,
+    pRole: document.getElementById('p-role').value,
+    pBg: document.getElementById('p-bg').value,
+    pMba: document.getElementById('p-mba').value,
+    pOffer: document.getElementById('p-offer').value,
+  };
+  localStorage.setItem('li-profile', JSON.stringify(profile));
+  flash('profile-saved');
+}
+function saveApiKey(){
+  localStorage.setItem('li-apikey', document.getElementById('p-apikey').value.trim());
+  flash('key-saved');
+}
+function flash(id){ const el=document.getElementById(id); el.style.display='inline'; setTimeout(()=>el.style.display='none',2000); }
+
+// ── Generate ──
+function profileCtx(){
+  if(profile.name){
+    return `Your name: ${profile.name}.
+Current role: ${profile.pRole||'journalist'}.
+Background: ${profile.pBg||''}.
+${profile.pMba?'Target MBA programs: '+profile.pMba+'.':''}
+${profile.pOffer?'What you offer: '+profile.pOffer+'.':''}`;
+  }
+  return 'You are a senior tech journalist from Taiwan (covering AI, cybersecurity, and digital trends), exploring an MBA and transition into strategy consulting.';
+}
+
+function buildPrompt(ctx){
+  return `You are helping a professional craft two LinkedIn outreach messages. English only. Be specific, not generic — never use vague lines like "I came across your profile."
+
+SENDER CONTEXT:
+${profileCtx()}
+
+TARGET:
+Name: ${ctx.name||'(not given)'}
+Current role: ${ctx.role||'(not given)'}
+Background: ${ctx.bg||'(not given)'}
+Company / School: ${ctx.org||'(not given)'}
+Common ground / hook: ${ctx.hook||'(not specified)'}
+
+SENDER'S GOALS: ${ctx.goals||'career transition advice, MBA strategy, consulting entry'}
+TONE: ${ctx.tone}
+
+Write TWO messages separated by exactly this delimiter on its own line: ===COFFEE===
+
+MESSAGE 1 — CONNECT REQUEST:
+• Hard limit: 300 characters total (LinkedIn's connection note limit)
+• Reference the specific hook or common ground
+• One clear reason you want to connect
+• No emojis, no hashtags, no flattery
+
+MESSAGE 2 — COFFEE CHAT MESSAGE (send after connecting):
+• 55–80 words
+• Reference something specific about their journey
+• Make a clear, low-friction ask: "Would you be open to a 20-min virtual chat?"
+• End with an easy yes/no question
+• No emojis
+
+Output only the two messages. No labels, no preamble, no markdown.`;
+}
+
+async function callAPI(prompt, maxTokens=900){
+  const key = getApiKey();
+  if(!key){ alert('Add your Anthropic API key in Setup first.'); return null; }
+  const res = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
+    body: JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens: maxTokens,
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'API error'); }
+  const data = await res.json();
+  return data.content?.map(b=>b.text||'').join('')||'';
+}
+
+async function generate(){
+  const ctx = {
+    name: document.getElementById('f-name').value.trim(),
+    role: document.getElementById('f-role').value.trim(),
+    bg: document.getElementById('f-bg').value.trim(),
+    org: document.getElementById('f-org').value.trim(),
+    hook: document.getElementById('f-hook').value.trim(),
+    goals: getGoals(), tone: getTone()
+  };
+  if(!ctx.name && !ctx.role){ alert('Fill in at least a name or role.'); return; }
+  lastCtx = ctx;
+
+  document.getElementById('output-area').style.display = 'block';
+  document.getElementById('gen-btn').disabled = true;
+  setLoading('connect'); setLoading('coffee');
+
+  try {
+    const raw = await callAPI(buildPrompt(ctx));
+    if(!raw) return;
+    const parts = raw.split(/^===COFFEE===$/m);
+    msgs.connect = (parts[0]||'').trim();
+    msgs.coffee = (parts[1]||'').trim();
+    setText('connect', msgs.connect);
+    setText('coffee', msgs.coffee);
+  } catch(e){
+    setText('connect', '⚠ '+e.message);
+    setText('coffee', '');
+  }
+  document.getElementById('gen-btn').disabled = false;
+}
+
+async function regen(type){
+  if(!lastCtx.name && !lastCtx.role){ alert('Fill in the form first.'); return; }
+  setLoading(type);
+  const isConnect = type==='connect';
+  const spec = isConnect
+    ? 'Write a LinkedIn CONNECT REQUEST only. Hard limit: 300 characters. Reference the specific hook. No emojis or hashtags.'
+    : 'Write a COFFEE CHAT follow-up only. 55–80 words. Specific ask for a 20-min virtual chat. End with a yes/no question. No emojis.';
+  const prompt = `${spec}
+
+SENDER:
+${profileCtx()}
+
+TARGET: ${lastCtx.name||''} — ${lastCtx.role||''}, ${lastCtx.bg||''}
+Hook: ${lastCtx.hook||'(none)'}
+Goals: ${lastCtx.goals}
+Tone: ${lastCtx.tone}
+
+Output only the message text.`;
+  try {
+    const raw = await callAPI(prompt, 400);
+    if(raw){ msgs[type] = raw.trim(); setText(type, msgs[type]); }
+  } catch(e){ setText(type,'⚠ '+e.message); }
+}
+
+function setLoading(type){
+  document.getElementById('out-'+type).innerHTML = '<span class="spinner-inline"></span>Generating...';
+  document.getElementById(type==='connect'?'cc-info':'fc-info').textContent = '—';
+}
+function setText(type, text){
+  document.getElementById('out-'+type).textContent = text;
+  if(type==='connect'){
+    const n = text.length;
+    const el = document.getElementById('cc-info');
+    el.textContent = n+' / 300 chars';
+    el.className = 'char-info'+(n>300?' warn':'');
+  } else {
+    const wc = text.split(/\s+/).filter(Boolean).length;
+    document.getElementById('fc-info').textContent = wc+' words';
+  }
+}
+async function copyMsg(type){
+  const t = msgs[type]; if(!t) return;
+  await navigator.clipboard.writeText(t);
+  const btn = document.getElementById('copy-'+type[0]);
+  const orig = btn.textContent;
+  btn.textContent = 'Copied ✓'; btn.classList.add('done');
+  setTimeout(()=>{ btn.textContent=orig; btn.classList.remove('done'); }, 1600);
+}
+
+// ── Log ──
+function saveEntry(type){
+  const text = msgs[type]; if(!text) return;
+  const entry = {
+    id: Date.now(),
+    name: document.getElementById('f-name').value.trim()||'Unknown',
+    role: document.getElementById('f-role').value.trim(),
+    type: type==='connect'?'Connect':'Coffee Chat',
+    text, status:'sent',
+    date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+  };
+  log.unshift(entry);
+  localStorage.setItem('li-log', JSON.stringify(log));
+  alert(`Saved — ${entry.name} (${entry.type})`);
+}
+
+function renderLog(){
+  const total = log.length;
+  const replied = log.filter(e=>e.status==='replied').length;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-replied').textContent = replied;
+  document.getElementById('s-rate').textContent = total ? Math.round(replied/total*100)+'%' : '—';
+
+  const wrap = document.getElementById('log-wrap');
+  if(!total){
+    wrap.innerHTML='<div class="log-empty"><div class="big">∅</div><p>No messages saved yet.</p></div>'; return;
+  }
+
+  const statuses = ['sent','pending','replied','no-reply'];
+  wrap.innerHTML = `<table class="log-table">
+    <thead><tr><th>Person</th><th>Type</th><th>Date</th><th>Status</th><th></th></tr></thead>
+    <tbody>${log.map(e=>`
+      <tr>
+        <td><div class="log-name">${e.name}</div><div class="log-role">${e.role||''}</div></td>
+        <td>${e.type}</td>
+        <td style="font-family:var(--font-mono);font-size:11px;color:var(--ink3)">${e.date}</td>
+        <td><span class="status-pill ${e.status}" title="Click to cycle status" onclick="cycleStatus(${e.id})">${e.status.replace('-',' ')}</span></td>
+        <td style="display:flex;gap:6px;align-items:center">
+          <button class="expand-btn" onclick="toggleDetail(${e.id})">view</button>
+          <button class="del-btn" onclick="deleteEntry(${e.id})">del</button>
+        </td>
+      </tr>
+      <tr id="detail-${e.id}">
+        <td colspan="5" style="padding:0">
+          <div class="log-detail" id="log-detail-${e.id}">${e.text}</div>
+        </td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+function cycleStatus(id){
+  const e = log.find(x=>x.id===id); if(!e) return;
+  const s=['sent','pending','replied','no-reply'];
+  e.status = s[(s.indexOf(e.status)+1)%s.length];
+  localStorage.setItem('li-log', JSON.stringify(log));
+  renderLog();
+}
+function deleteEntry(id){
+  if(!confirm('Delete this entry?')) return;
+  log = log.filter(x=>x.id!==id);
+  localStorage.setItem('li-log', JSON.stringify(log));
+  renderLog();
+}
+function toggleDetail(id){
+  const el = document.getElementById('log-detail-'+id);
+  el.style.display = el.style.display==='block'?'none':'block';
+}
+
+// ── Init ──
+checkSession();
+document.getElementById('auth-pw').addEventListener('keydown',e=>{ if(e.key==='Enter') login(); });
+</script>
+</body>
+</html>
